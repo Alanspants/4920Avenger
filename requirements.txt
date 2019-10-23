@@ -1,1 +1,5 @@
 Flask==1.1.1
+beautifulsoup4==4.8.1
+html5lib==1.0.1
+lxml==4.4.1
+pandas==0.25.2
