@@ -24,5 +24,5 @@ class Money(object):
             position[dollar[0]] = index
         return moneydict, position
 
-# moneydict, position = Money.search_data()
+# moneydict, position = Money.search_da ta()
 # print(position)
