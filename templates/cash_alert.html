@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% for cash_data in cash_data%}
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body" style="background-color:#721c24">
+                <h5 class="card-title">{{cash_data.currency}}</h5>
+                <p class="card-text">Bank Buy: {{cash_data.price[0]}}</p>
+                <p class="card-text">Bank Sale: {{cash_data.price[1]}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

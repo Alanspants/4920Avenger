@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% for sign_data in sign_data%}
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body" style="background-color:#721c24">
+                <h5 class="card-title">{{sign_data.currency}}</h5>
+                <p class="card-text">Bank Buy: {{sign_data.price[0]}}</p>
+                <p class="card-text">Bank Sale: {{sign_data.price[1]}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

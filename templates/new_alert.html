@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="/new_alert" method="post">
+
+    <div class="form-group">
+        <label for="input_currency">Currency</label>
+        <select class="form-control" id="input_currency" name="input_currency">
+            {% for position in range(0,19) %}
+            <option value="{{moneydict[position].currency}}">{{moneydict[position].currency}}</option>
+            {% endfor %}
+        </select>
+        <small id="input_currency_help" class="form-text text-muted">Each currency can only add two new notification</small>
+    </div>
+
+    <div class="form-group">
+        <label for="rate_exchange">Exchange Rate</label>
+        <select class="form-control" id="rate_exchange" name="rate_exchange">
+            <option value="cash">Cash</option>
+            <option value="sign">Sign</option>
+            <!--            <option>3</option>-->
+            <!--            <option>4</option>-->
+            <!--            <option>5</option>-->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="bank_buy">Bank Buy</label>
+        <input type="text" class="bank_buy" id="bank_buy" placeholder="Notification Rate" name="bank_buy"
+               required="required" pattern="\d+\.?\d*">
+        <small id="bank_buy_help" class="form-text text-muted">Example: 10 or 10.1 or 0.1</small>
+    </div>
+
+    <div class="form-group">
+        <label for="bank_sale">Bank Sale</label>
+        <input type="text" class="bank_sale" id="bank_sale" placeholder="Notification Rate" name="bank_sale"
+               required="required" pattern="\d+\.?\d*">
+        <small id="bank_sale_help" class="form-text text-muted">Example: 10 or 10.1 or 0.1</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">New notification</button>
+
+    <p>{{message}}</p>
+    <p>{{currency_msg}}</p>
+    <p>{{exchange_msg}}</p>
+    <p>{{buy_msg}}</p>
+    <p>{{sale_msg}}</p>
+
+</form>
+{% endblock %}

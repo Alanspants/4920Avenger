@@ -3,10 +3,18 @@ from flask import request, redirect
 from modles.money import Money
 from modles.user import User
 from modles.database import Database
+from modles.all_alert import All_alert
 
 app = Flask(__name__)
 app.secret_key = "Alan "
 Database.initialize()
+
+
+@app.before_first_request
+def initialize():
+    Database.initialize()
+    session["email"] = session.get("email")
+    session["name"] = session.get("name")
 
 
 @app.route("/")
@@ -60,6 +68,41 @@ def logout():
     return redirect("/")
 
 
+@app.route("/new_alert", methods=["GET", "POST"])
+def new_alert():
+    if session['email']:
+        moneydict, position = Money.search_data()
+        if request.method == "POST":
+            input_currency = request.form['input_currency']
+            rate_exchange = request.form['rate_exchange']
+            bank_buy = request.form['bank_buy']
+            bank_sale = request.form['bank_sale']
+
+            result = All_alert.create_alert(session['email'], input_currency, rate_exchange, [bank_buy, bank_sale])
+
+            if result is True:
+                message = "Successfully adding new notification"
+                currency_msg = "Currency: {}".format(input_currency)
+                exchange_msg = "Exchange Rate: {}".format("cash" if rate_exchange == "cash" else "sale")
+                buy_msg = "Bank buy price: {}".format(bank_buy)
+                sale_msg = "Bank sale price: {}".format(bank_sale)
+                return render_template("new_alert.html", moneydict=moneydict, message=message, currency=currency_msg,
+                                       exchange_msg=exchange_msg, buy_msg=buy_msg, sale_msg=sale_msg)
+            else:
+                message = "Adding new notification fail, you already has a same notification!"
+                currency_msg = "Currency: {}".format(input_currency)
+                exchange_msg = "Exchange Rate: {}".format("cash" if rate_exchange == "cash" else "sale")
+                buy_msg = "Bank buy price: {}".format(bank_buy)
+                sale_msg = "Bank sale price: {}".format(bank_sale)
+                return render_template("new_alert.html", moneydict=moneydict, message=message,
+                                       currency=currency_msg,
+                                       exchange_msg=exchange_msg, buy_msg=buy_msg, sale_msg=sale_msg)
+        else:
+            return render_template("new_alert.html", moneydict=moneydict)
+    else:
+        return redirect("/login")
+
+
 @app.route("/change_email", methods=['GET', 'POST'])
 def change_email():
     if session['email']:
@@ -80,6 +123,21 @@ def change_email():
     else:
         return redirect("/login")
 
+@app.route("/cash_alert")
+def cash_alert():
+    if session["email"]:
+        cash_data = All_alert.find_user_alert(session["email"],"cash")
+        return render_template("cash_alert.html", cash_data=cash_data)
+    else:
+        return redirect("/login")
+
+@app.route("/sign_alert")
+def sign_alert():
+    if session["email"]:
+        sign_data = All_alert.find_user_alert(session["email"],"sign")
+        return render_template("sign_alert.html", sign_data=sign_data)
+    else:
+        return redirect("/login")
 
 if __name__ == "__main__":
     app.run(debug=True, port=4100)
