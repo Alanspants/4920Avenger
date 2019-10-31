@@ -11,7 +11,8 @@ class All_alert(object):
 
     @staticmethod
     def create_alert(email, currency, rate_exchange, price):
-        alert_data = Database.find_one(collection="all_alert", query={"email": email, "currency": currency, "rate_exchange": rate_exchange})
+        alert_data = Database.find_one(collection="all_alert",
+                                       query={"email": email, "currency": currency, "rate_exchange": rate_exchange})
         if alert_data is not None:
             return False
         All_alert(email, currency, rate_exchange, price).save_to_db()
@@ -32,6 +33,13 @@ class All_alert(object):
     def find_user_alert(email, rate_exchange):
         return Database.find(collection="all_alert", query={"email": email, "rate_exchange": rate_exchange})
 
-    # @staticmethod
-    # def update_user_email(old_email, email):
-    #     Database.update(collection="users", query={"email": old_email}, data={"$set": {"email": email}})
+    @staticmethod
+    def update_user_alert(email, currency, rate_exchange, price):
+        Database.update(collection="all_alert",
+                        query={"email": email, "currency": currency, "rate_exchange": rate_exchange},
+                        data={"$set": {"price": price}})
+
+    @staticmethod
+    def delete_user_alert(email, currency, rate_exchange):
+        Database.remove(collection="all_alert",
+                        query={"email": email, "currency": currency, "rate_exchange": rate_exchange})

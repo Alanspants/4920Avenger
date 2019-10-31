@@ -123,21 +123,50 @@ def change_email():
     else:
         return redirect("/login")
 
+
 @app.route("/cash_alert")
 def cash_alert():
     if session["email"]:
-        cash_data = All_alert.find_user_alert(session["email"],"cash")
+        cash_data = All_alert.find_user_alert(session["email"], "cash")
         return render_template("cash_alert.html", cash_data=cash_data)
     else:
         return redirect("/login")
 
+
 @app.route("/sign_alert")
 def sign_alert():
     if session["email"]:
-        sign_data = All_alert.find_user_alert(session["email"],"sign")
+        sign_data = All_alert.find_user_alert(session["email"], "sign")
         return render_template("sign_alert.html", sign_data=sign_data)
     else:
         return redirect("/login")
 
+@app.route("/update_alert", methods=["POST"])
+def update_alert():
+    if request.method == "POST":
+        bank_buy = request.form["bank_buy"]
+        bank_sale = request.form["bank_sale"]
+        currency = request.form["currency"]
+        rate_exchange = request.form["rate_exchange"]
+        if rate_exchange == "cash":
+            print("test")
+            All_alert.update_user_alert(session["email"], currency, rate_exchange, [bank_buy, bank_sale])
+            return redirect("/cash_alert")
+        if rate_exchange == "sign":
+            All_alert.update_user_alert(session["email"], currency, rate_exchange, [bank_buy, bank_sale])
+            return redirect("/sign_alert")
+
+@app.route("/delete_alert", methods=["POST"])
+def delete_alert():
+    if request.method == "POST":
+        currency = request.form["currency"]
+        rate_exchange = request.form["rate_exchange"]
+        if rate_exchange == "cash":
+            All_alert.delete_user_alert(session["email"], currency, rate_exchange)
+            return redirect("/cash_alert")
+        if rate_exchange == "sign":
+            All_alert.delete_user_alert(session["email"], currency, rate_exchange)
+            return redirect("/sign_alert")
+
 if __name__ == "__main__":
-    app.run(debug=True, port=4100)
+    app.run(debug=True, port=5100)
