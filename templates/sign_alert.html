@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% for sign_data in sign_data%}
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body" style="background-color:#721c24">
+                <form action="/update_alert" , method="post">
+                    <h5 class="card-title">{{sign_data.currency}}</h5>
+                    <input type="hidden" name="currency" value="{{sign_data.currency}}">
+                    <input type="hidden" name="rate_exchange" value="sign">
+                    <div class="form-group row">
+                        <label for="bank_buy" class="col-sm-5 col-form-label">Bank Buy: </label>
+                        <div class="col-sm-7">
+                            <input type="tel" class="form-control" id="bank_buy" name="bank_buy" required="required"
+                                   pattern="\d+\.?\d*" placeholder="{{sign_data.price[0]}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="bank_sale" class="col-sm-5 col-form-label">Bank Sale: </label>
+                        <div class="col-sm-7">
+                            <input type="tel" class="form-control" id="bank_sale" name="bank_sale" required="required"
+                                   pattern="\d+\.?\d*" placeholder="{{sign_data.price[1]}}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+                <form action="/delete_alert" method="post">
+                    <input type="hidden" name="currency" value="{{sign_data.currency}}">
+                    <input type="hidden" name="rate_exchange" value="sign">
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
