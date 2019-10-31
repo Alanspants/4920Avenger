@@ -4,3 +4,4 @@ html5lib==1.0.1
 lxml==4.4.1
 pandas==0.25.2
 pymongo==3.9.0
+passlib==1.7.1
