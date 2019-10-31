@@ -30,55 +30,101 @@
         }
       }
 
+
+
+
+
+
+
+
+
     </style>
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
 </head>
 <body class="text">
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="masthead mb-auto">
-        <div class="inner">
-            {% if session['email'] %}
-            <h3 class="masthead-brand">{{session['name']}}</h3>
-            {% endif %}
-            {% if not session['email'] %}
-            <h3 class="masthead-brand">Welcome</h3>
-            {% endif %}
-            <nav class="nav nav-masthead justify-content-center">
-                {% if not session['email'] %}
-                <a class="nav-link active" href="/register">Register</a>
-                <a class="nav-link" href="/login">Login</a>
-                {% endif %}
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="masthead mb-auto">
+            <div class="inner">
                 {% if session['email'] %}
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/new_alert">New Alert</a>
-                <a class="nav-link" href="/cash_alert">Cash Alert</a>
-                <a class="nav-link" href="/sign_alert">Sign Alert</a>
-                <a class="nav-link" href="/change_email">Change Email</a>
-                <a class="nav-link" href="/logout">Logout</a>
+                <center><h3 class="title">Welcome {{session['name']}}.</h3></center>
                 {% endif %}
-            </nav>
-        </div>
-    </header>
+                {% if not session['email'] %}
+                <center><h3 class="title">Welcome tourist.</h3></center>
+                {% endif %}
+                <!--                <nav class="nav nav-masthead justify-content-center">-->
+                <!--                    {% if not session['email'] %}-->
+                <!--                    <a class="nav-link active" href="/register">Register</a>-->
+                <!--                    <a class="nav-link" href="/login">Login</a>-->
+                <!--                    {% endif %}-->
+                <!--                    {% if session['email'] %}-->
+                <!--                    <a class="nav-link" href="/">Home</a>-->
+                <!--                    <a class="nav-link" href="/new_alert">New Alert</a>-->
+                <!--                    <a class="nav-link" href="/cash_alert">Cash Alert</a>-->
+                <!--                    <a class="nav-link" href="/sign_alert">Sign Alert</a>-->
+                <!--                    <a class="nav-link" href="/change_email">Change Email</a>-->
+                <!--                    <a class="nav-link" href="/logout">Logout</a>-->
+                <!--                    {% endif %}-->
+                <!--                </nav>-->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </button>
+                    <div class="dropdown-menu">
+                        {% if session['email'] %}
+                        <a class="dropdown-item" href="#">{{session['email']}}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/change_email">Change Email</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                        {% endif %}
+                        {% if not session['email'] %}
+                        <a class="dropdown-item" href="/register">Register</a>
+                        <a class="dropdown-item" href="/login">Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if session['email'] %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Notification
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/new_alert">New Notification</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/cash_alert">Cash rate</a>
+                        <a class="dropdown-item" href="/sign_alert">Sign rate</a>
+                    </div>
 
-    <!--  <main role="main" class="inner cover">-->
-    <!--    <h1 class="cover-heading">Cover your page.</h1>-->
-    <!--    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>-->
-    <!--    <p class="lead">-->
-    <!--      <a href="#" class="btn btn-lg btn-secondary">Learn more</a>-->
-    <!--    </p>-->
-    <!--  </main>-->
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info btn-home"><a herf="/">Homepage</a></button>
+                </div>
+                {% endif %}
+            </div>
+        </header>
 
-    {% block content %}
+        <!--  <main role="main" class="inner cover">-->
+        <!--    <h1 class="cover-heading">Cover your page.</h1>-->
+        <!--    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>-->
+        <!--    <p class="lead">-->
+        <!--      <a href="#" class="btn btn-lg btn-secondary">Learn more</a>-->
+        <!--    </p>-->
+        <!--  </main>-->
 
-    {% endblock %}
+        {% block content %}
 
-    <footer class="mastfoot mt-auto">
-        <div class="inner">
-            <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a
-                    href="https://twitter.com/mdo">@mdo</a>.</p>
-        </div>
-    </footer>
+        {% endblock %}
+
+        <footer class="mastfoot mt-auto">
+            <div class="inner">
+                <p>Create by <a
+                        href="">@Avengers </a>.</p>
+            </div>
+        </footer>
+    </div>
 </div>
 </body>
 </html>

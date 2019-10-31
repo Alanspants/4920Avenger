@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
     {% for cash_data in cash_data%}
-    <div class="col-sm-6">
+    <div class="col-sm-6 alert-card">
         <div class="card">
             <div class="card-body" style="background-color:#721c24">
                 <form action="/update_alert" , method="post">
@@ -10,21 +10,21 @@
                     <input type="hidden" name="currency" value="{{cash_data.currency}}">
                     <input type="hidden" name="rate_exchange" value="cash">
                     <div class="form-group row">
-                        <label for="bank_buy" class="col-sm-5 col-form-label">Bank Buy: </label>
-                        <div class="col-sm-7">
+                        <label for="bank_buy" class="col-sm-6 col-form-label">Bank Buy: </label>
+                        <div class="col-sm-6">
                             <input type="tel" class="form-control" id="bank_buy" name="bank_buy" required="required"
                                    pattern="\d+\.?\d*" placeholder="{{cash_data.price[0]}}">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="bank_sale" class="col-sm-5 col-form-label">Bank Sale: </label>
-                        <div class="col-sm-7">
+                        <label for="bank_sale" class="col-sm-6 col-form-label">Bank Sale: </label>
+                        <div class="col-sm-6">
                             <input type="tel" class="form-control" id="bank_sale" name="bank_sale" required="required"
                                    pattern="\d+\.?\d*" placeholder="{{cash_data.price[1]}}">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary btn-update">Update</button>
 
                     <!--                    <h5 class="card-title">{{cash_data.currency}}</h5>-->
                     <!--                    <p class="card-text">Bank Buy: {{cash_data.price[0]}}</p>-->
