@@ -4,6 +4,8 @@ from modles.money import Money
 from modles.user import User
 from modles.database import Database
 from modles.all_alert import All_alert
+from modles.job_check import check_alert
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 app.secret_key = "Alan "
@@ -15,6 +17,12 @@ def initialize():
     Database.initialize()
     session["email"] = session.get("email")
     session["name"] = session.get("name")
+
+    Scheduler = BackgroundScheduler()
+
+    # Scheduler.add_job(check_alert, "interval", seconds=10)
+    Scheduler.add_job(check_alert, "cron", day_of_week="0-4", hour="16",minute="30")
+    Scheduler.start()
 
 
 @app.route("/")
