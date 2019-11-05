@@ -5,9 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Cover Template · Bootstrap</title>
+    <title>iCurrency</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/cover/">
 
@@ -32,16 +31,55 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
+
   </head>
-  <body class="text-center">
+  <body class="site-wrapper">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="masthead mb-auto">
-    <div class="inner">
-      <h3 class="masthead-brand">Cover</h3>
-      <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link active" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Contact</a>
+    <div class="inner" style="position: relative">
+      <h3 class="title">iCurrency</h3>
+
+      <button type="button" class="btn btn-info"><a href="/">Home</a></button>
+      {% if not session['email']%}
+      <button type="button" class="btn btn-info"><a href="/register">Register</a></button>
+      <button type="button" class="btn btn-info"><a href="/login">Login</a></button>
+
+      {% endif %}
+
+
+      {% if session['email']%}
+
+      <div class="btn-group">
+      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+          Account
+      </button>
+      <div class="dropdown-menu">
+          <a class="dropdown-item">{{session['email']}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/change_email">Change Email</a>
+          <a class="dropdown-item" href="/logout">Logout</a>
+      </div>
+  </div>
+  <div class="btn-group">
+      <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+          Reminder
+      </button>
+      <div class="dropdown-menu">
+          <a class="dropdown-item" href="/new_alert">Create Reminder</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/cash_alert">Reminder List</a>
+      </div>
+  </div>
+  {% endif %}
+      <!-- Search form -->
+<form class="form-inline active-purple-4">
+  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+    aria-label="Search">
+  <i class="fas fa-search" aria-hidden="true"></i>
+</form>
+
       </nav>
     </div>
   </header>
@@ -50,7 +88,7 @@
         {% endblock %}
   <footer class="mastfoot mt-auto">
     <div class="inner">
-      <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+      <p align="center">Avengers Group</p>
     </div>
   </footer>
 </div>

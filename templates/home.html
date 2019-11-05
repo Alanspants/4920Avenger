@@ -1,5 +1,25 @@
 {% extends "base.html"%}
 
 {% block content%}
-<h1>hello</h1>
+
+  <table class="table">
+    <thead class="thead-light">  <thead>
+    <tr>
+      <th class="text-white">Currency</th>
+      <th class="text-white">Code</th>
+      <th class="text-white">Sell Rate</th>
+      <th class="text-white">Buy Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for position in range(0, 42)%}
+    <tr class="text-white">
+      <td align="left"><img src="https://wtms.wexchange.com.au/wtms/Assets/Currency/{{moneydict[position].code}}.png">&nbsp;{{moneydict[position].currency}}</td>
+      <td>{{moneydict[position].code}}</td>
+      <td>{{moneydict[position].sell_rate}}</td>
+      <td>{{moneydict[position].buy_rate}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
