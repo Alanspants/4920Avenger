@@ -1,20 +1,12 @@
-a=["-","-"]
-if a[0] != "-":
-    if a[0] > 4:
-        print("4")
-    elif a[1] != "-":
-        if a[1] < 6:
-            print("6")
-        else:
-            print("7 pass")
+tester=["2","3"]
+if int(tester[0]) > 3:
+    print("greater")
+elif int(tester[1]) != "-":
+    if int(tester[1]) < 3:
+        print("less")
     else:
-        print("8 pass")
-
-elif a[1] != "-":
-    if a[1] < 6:
-        print("9")
-    else:
-        print("10 pass")
-
+        print("nothing")
 else:
-    print("11 pass")
+    print("nothing")
+
+
