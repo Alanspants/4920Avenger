@@ -1,10 +1,10 @@
 from backends.database import Database
 
-Database.initialize()
+Database.setup()
 
 
-print(Database.find_one(collection="test", query={"name":"dolly"}))
-print(Database.find(collection="test",query={"age":"3"}))
-print(Database.find_all(collection="test"))
-print(Database.find_all(collection="test")[0])
-print(Database.find_all(collection="test")[1])
+print(Database.match(document="test", new_record={"name":"dolly"}))
+print(Database.find(document="test",new_record={"age":"3"}))
+print(Database.get_all(document="test"))
+print(Database.get_all(document="test")[0])
+print(Database.get_all(document="test")[1])

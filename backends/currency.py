@@ -1,7 +1,7 @@
 import pandas as pd
 import ssl
 
-class Money(object):
+class Source(object):
     def __init__(self, currency, code, sell_rate, buy_rate):
         self.currency = currency
         self.code = code
@@ -9,31 +9,30 @@ class Money(object):
         self.buy_rate = buy_rate
 
     @staticmethod
-    def search_data():
+    def get_currency():
         ssl._create_default_https_context = ssl._create_unverified_context
         data = pd.read_html("https://www.wexchange.com.au/exchange-rates/")[0]
         pd.set_option('display.width',None)
         data.columns = ["Currency", "Code", "Sell Rate", "Delete", "Buy Rate"]
-
         data["Currency"] = data["Currency"].str.replace(r'\((.)+$', '').str.strip()
         data.drop(["Delete"], inplace=True, axis=1)
+        currencypos = {}
+        currencylist = {}
         currency_name = data['Code']
-        moneydict = {}
-        position = {}
-        for i in range(0, 42):
-            dollar = data.values[i]
-            moneydict[i] = Money(dollar[0], dollar[1], dollar[2], dollar[3])
-            position[currency_name.values[i]] = i
-        return moneydict, position
+        for pos in range(0, 42):
+            currencypos[currency_name.values[pos]] = pos
+            elements = data.values[pos]
+            currencylist[pos] = Source(elements[0], elements[1], elements[2], elements[3])
+        return currencylist, currencypos
 #http://www.ezybonds.com/exchange.asp
 
 '''
 # test
-# moneydict, position = Money.search_data()
+# list, cp = Money.search_data()
 # 
 # for i in range(0, 42):
-#     print(moneydict[i].currency)
-#     print(moneydict[i].code)
-#     print(moneydict[i].sell_rate)
-#     print(moneydict[i].buy_rate)
+#     print(list[i].currency)
+#     print(list[i].code)
+#     print(list[i].sell_rate)
+#     print(list[i].buy_rate)
 '''

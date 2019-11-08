@@ -1,13 +1,13 @@
 {% extends "base.html"%}
 {% block content %}
-<form action="/new_alert" method="post">
+<form action="/create_reminder" method="post">
 
 
   <div class="form-group">
     <label for="input_currency">Foreign Currency</label>
     <select class="form-control" name="input_currency" id="input_currency" >
       {% for position in range(0, 42)%}
-      <option value="{{moneydict[position].code}}">{{moneydict[position].code}} {{moneydict[position].currency}}</option>
+      <option value="{{currencylist[position].code}}">{{currencylist[position].code}} {{currencylist[position].currency}}</option>
       {% endfor%}
     </select>
     <small id="price_remind" class="form-text text-muted">You can add buy and sell rates here:)</small>
@@ -27,10 +27,11 @@
 
 
   <button type="submit" class="btn btn-primary">Submit</button>
-  <p align="left">{{message}}</p>
-  <p align="left">{{currency_msg}}</p>
-  <p align="left">{{buy_msg}}</p>
-  <p align="left">{{sell_msg}}</p>
+  <p align="left">{{curr_info}}</p>
+  <p align="left">{{buy_info}}</p>
+  <p align="left">{{sell_info}}</p>
+  <p align="left">{{info}}</p>
+
 
 </form>
 {% endblock %}

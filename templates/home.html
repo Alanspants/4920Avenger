@@ -14,10 +14,10 @@
   <tbody>
   {% for position in range(0, 42)%}
     <tr class="text-white">
-      <td align="left"><img src="https://wtms.wexchange.com.au/wtms/Assets/Currency/{{moneydict[position].code}}.png">&nbsp;{{moneydict[position].currency}}</td>
-      <td>{{moneydict[position].code}}</td>
-      <td>{{moneydict[position].sell_rate}}</td>
-      <td>{{moneydict[position].buy_rate}}</td>
+      <td align="left"><img src="https://wtms.wexchange.com.au/wtms/Assets/Currency/{{currencylist[position].code}}.png">&nbsp;{{currencylist[position].currency}}</td>
+      <td>{{currencylist[position].code}}</td>
+      <td>{{currencylist[position].sell_rate}}</td>
+      <td>{{currencylist[position].buy_rate}}</td>
     </tr>
     {% endfor %}
   </tbody>

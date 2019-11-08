@@ -7,45 +7,45 @@ class User(object):
         self.email = email
         self.password = password
 
-    @staticmethod
-    def register_user(name, email, password):
-        user_data = Database.find_one(collection="users", query={"email": email})
-        if user_data is not None:
-            return False
-        User(name, email, User.hash_password(password)).save_to_db()
-        return True
+    def to_json(self):
+        return {"name": self.name, "email": self.email, "password": self.password}
+
+    def add_to_database(self):
+        Database.add_new(document="users", new=self.to_json())
 
     @staticmethod
-    def check_user(email, password):
-        user_data = Database.find_one(collection="users", query={"email": email})
-        if user_data is None:
+    def new_user(name, email, password):
+        match = Database.match(document="users", new_record={"email": email})
+        if match is not None:
             return False
-        if User.check_hash_password(password, user_data["password"]) is False:
-            return False
-        return True
-
-    def save_to_db(self):
-        Database.insert(collection="users", data=self.json())
-
-    def json(self):
-        return {
-            "name": self.name,
-            "email": self.email,
-            "password": self.password
-        }
+        else:
+            User(name, email, User.encode_password(password)).add_to_database()
+            return True
 
     @staticmethod
-    def hash_password(password):
+    def get_user_by_email(email):
+        return Database.match(document="users", new_record={"email": email})
+
+    @staticmethod
+    def encode_password(password):
         return pbkdf2_sha512.hash(password)
 
     @staticmethod
-    def check_hash_password(password, hash_password):
+    def validation_password(password, hash_password):
         return pbkdf2_sha512.verify(password, hash_password)
 
     @staticmethod
-    def find_user_data(email):
-        return Database.find_one(collection="users", query={"email": email})
+    def update_user_by_email(old, new):
+        Database.update_record(document="users", new_record={"email":old}, new_query={"$set": {"email": new}})
 
     @staticmethod
-    def update_user_email(old_email, email):
-        Database.update(collection="users", query={"email":old_email}, data={"$set": {"email": email}})
+    def validation(email, password):
+        user = Database.match(document="users", new_record={"email": email})
+        if user is None:
+            return False
+        if User.validation_password(password, user["password"]) is False:
+            return False
+        return True
+
+
+

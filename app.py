@@ -1,81 +1,81 @@
-from flask import Flask, render_template, request, redirect, session
-from backends.job_check import check_alert
+from flask import Flask, request, render_template, session, redirect
+from backends.database import Database as db
+from backends.email_send import get_reminder
 from apscheduler.schedulers.background import BackgroundScheduler
-from backends.money import Money
+from backends.currency import Source
 from backends.user import User
-from backends.database import Database
-from backends.All_alert import All_alert
+from backends.reminder import Reminder
 import datetime
 app = Flask(__name__)
+# app.config['SECRET_KEY']=os.urandom(24)
 app.secret_key = "123123123"
 
 @app.before_first_request
-def initialize():
-    Database.initialize()
+def setup():
     session["email"] = session.get("email")
     session["name"] = session.get("name")
+    db.setup()
     # work = BackgroundScheduler(check_alert, "cron", day_of_week="0-4", hour="16", miniute="30")
     work = BackgroundScheduler()
-
-    # Scheduler.add_job(check_alert, "interval", seconds=10)
-    work.add_job(check_alert, "interval", seconds=100)
-    # Scheduler.add_job(check_alert, "cron", day_of_week="0-4", hour="18",minute="1")
+    # work.add_job(check_alert, "interval", seconds=10)
+    work.add_job(get_reminder, "interval", seconds=1000)
+    # work.add_job(check_alert, "cron", day_of_week="0-4", hour="18",minute="1")
     work.start()
 
 @app.route("/")
 def home():
-    moneydict, position = Money.search_data()
-    return render_template('home.html', moneydict=moneydict)
+    currencylist, pos = Source.get_currency()
+    return render_template('home.html', currencylist=currencylist)
 
-@app.route("/cash_alert")
-def cash_alert():
+@app.route("/reminders")
+def reminders():
     if session['email']:
-        find = All_alert.find_user_alert(session["email"])
-        return render_template("cash_alert.html", find=find)
+        find = Reminder.get_reminder_by_email(session["email"])
+        return render_template("reminders.html", find=find)
     else:
         return redirect("/login")
 
-@app.route("/update_alert", methods=["POST"])
-def update_alert():
+@app.route("/update_reminder", methods=["POST"])
+def update_reminder():
     if request.method == "POST":
-        bank_sell = request.form["bank_sell"]
-        bank_buy = request.form["bank_buy"]
-        currency = request.form["currency"]
-        All_alert.update_user_alert(session["email"], currency, [bank_sell, bank_buy])
-        return redirect("/cash_alert")
+        get_currency = request.form["currency"]
+        sell = request.form["update_sell"]
+        buy = request.form["update_buy"]
+        Reminder.update_reminder(session["email"], get_currency, [sell, buy])
+        return redirect("/reminders")
 
-@app.route("/delete_alert", methods=["POST"])
-def delete_alert():
+@app.route("/delete_reminder", methods=["POST"])
+def delete_reminder():
     if request.method == "POST":
-        currency = request.form["currency"]
-        All_alert.delete_user_alert(session["email"], currency)
-        return redirect("/cash_alert")
+        get_currency = request.form["currency"]
+        Reminder.delete_reminder(session["email"], get_currency)
+        return redirect("/reminders")
 
-@app.route("/new_alert", methods=["GET", "POST"])
-def new_alert():
+# new_alert
+@app.route("/create_reminder", methods=["GET", "POST"])
+def create_reminder():
     if session['email']:
-        moneydict, position = Money.search_data()
+        currencylist, pos = Source.get_currency()
         if request.method == 'POST':
             input_currency = request.form['input_currency']
             buy_rate = request.form['buy_rate']
             sell_rate = request.form['sell_rate']
 
-            result = All_alert.create_alert(session['email'], input_currency, [sell_rate, buy_rate])
-            if result is True:
-                message = "Wow! Reminder added successfully!"
-                currency_msg = "Currency Type: {}".format(input_currency)
-                buy_msg = "Buy Rate: ${}".format(buy_rate)
-                sell_msg = "Sell Rate: ${}".format(sell_rate)
-                return render_template("new_alert.html", moneydict=moneydict, message=message, currency_msg=currency_msg, buy_msg=buy_msg, sell_msg=sell_msg)
+            result = Reminder.new_reminder(session['email'], input_currency, [sell_rate, buy_rate])
+            if result is not True:
+                info = "Oops! Reminder added unsuccessfully !"
+                curr_info = "Currency Type : {}".format(input_currency)
+                buy_info = "Buy Rate: ${}".format(buy_rate)
+                sell_info = "Sell Rate: ${}".format(sell_rate)
+                return render_template("create_reminder.html", currencylist=currencylist, curr_info=curr_info, buy_info=buy_info, sell_info=sell_info, info=info)
             else:
-                message = "Oops! Reminder added unsuccessfully !"
-                currency_msg = "Currency Type : {}".format(input_currency)
-                buy_msg = "Buy Rate: ${}".format(buy_rate)
-                sell_msg = "Sell Rate: ${}".format(sell_rate)
-                return render_template("new_alert.html", moneydict=moneydict, message=message,
-                                       currency_msg=currency_msg, buy_msg=buy_msg, sell_msg=sell_msg)
+                curr_info = "Currency Type: {}".format(input_currency)
+                buy_info = "Buy Rate: ${}".format(buy_rate)
+                sell_info = "Sell Rate: ${}".format(sell_rate)
+                info = "Wow! Reminder added successfully!"
+                return render_template("create_reminder.html", currencylist=currencylist, curr_info=curr_info, buy_info=buy_info, sell_info=sell_info, info=info)
         else:
-            return render_template("new_alert.html", moneydict=moneydict)
+            return render_template("create_reminder.html", currencylist=currencylist)
     else:
         return redirect("/login")
 
@@ -85,14 +85,14 @@ def register():
         name = request.form['nameIn']
         email = request.form['emailIn']
         password = request.form['passwordIn']
-        result = User.register_user(name, email, password)
-        if result is True:
+        result = User.new_user(name, email, password)
+        if result is not True:
+            notification = "Oops! This email may have been registered!"
+            return render_template("register.html", notification=notification)
+        else:
             session['email'] = email
             session['name'] = name
             return redirect("/")
-        else:
-            message = "Oops! This email may have been registered!"
-            return render_template("register.html", message=message)
     else:
         return render_template("register.html")
 
@@ -102,14 +102,14 @@ def login():
     if request.method == 'POST':
         email = request.form['emailIn']
         password = request.form['passwordIn']
-        result = User.check_user(email, password)
-        if result is True:
-            session['email'] = email
-            session['name'] = User.find_user_data(email)['name']
-            return redirect("/")
+        result = User.validation(email, password)
+        if result is not True:
+            notification = "The email or password may be wrong"
+            return render_template("login.html", notification=notification)
         else:
-            message = "The email or password may be wrong"
-            return render_template("login.html", message=message)
+            session['email'] = email
+            session['name'] = User.get_user_by_email(email)['name']
+            return redirect("/")
     else:
         return render_template("login.html")
 
@@ -126,17 +126,18 @@ def logout():
 def change_email():
     if session['email']:
         if request.method == 'POST':
-            new_email = request.form['newEmail']
             password = request.form['passwordIn']
-            result = User.check_user(session['email'], password)
-            if result is True:
-                User.update_user_email(session['email'], new_email)
-                session['email'] = new_email
-                message = "Your new email {} is reset".format(new_email)
-                return render_template("change_email.html", message=message)
+            result = User.validation(session['email'], password)
+            new_email = request.form['newEmail']
+            if result is not True:
+                notification = "Oops! The password or email address may be wrong!"
+                return render_template("change_email.html", notification=notification)
             else:
-                message = "Oops! The password or email address may be wrong!"
-                return render_template("change_email.html", message=message)
+                User.update_user_by_email(session['email'], new_email)
+                session['email'] = new_email
+                notification = "Your new email {} is reset".format(new_email)
+                return render_template("change_email.html", notification=notification)
+
         else:
             return render_template("change_email.html")
     else:
