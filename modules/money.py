@@ -14,15 +14,16 @@ class Money(object):
         data = pd.read_html("https://www.wexchange.com.au/exchange-rates/")[0]
         pd.set_option('display.width',None)
         data.columns = ["Currency", "Code", "Sell Rate", "Delete", "Buy Rate"]
+
         data["Currency"] = data["Currency"].str.replace(r'\((.)+$', '').str.strip()
         data.drop(["Delete"], inplace=True, axis=1)
-        currency_name = data['Currency']
+        currency_name = data['Code']
         moneydict = {}
         position = {}
         for i in range(0, 42):
             dollar = data.values[i]
             moneydict[i] = Money(dollar[0], dollar[1], dollar[2], dollar[3])
-            position[currency_name[i][0]] = i
+            position[currency_name.values[i]] = i
         return moneydict, position
 #http://www.ezybonds.com/exchange.asp
 

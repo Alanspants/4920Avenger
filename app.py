@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
+from modules.job_check import check_alert
+from apscheduler.schedulers.background import BackgroundScheduler
 from modules.money import Money
 from modules.user import  User
 from modules.database import Database
@@ -11,7 +13,10 @@ def initialize():
     Database.initialize()
     session["email"] = session.get("email")
     session["name"] = session.get("name")
-
+    # work = BackgroundScheduler(check_alert, "cron", day_of_week="0-4", hour="16", miniute="30")
+    work = BackgroundScheduler(check_alert, "interval", seconds=10)
+    work.add_job()
+    work.start()
 
 @app.route("/")
 def home():
@@ -29,10 +34,10 @@ def cash_alert():
 @app.route("/update_alert", methods=["POST"])
 def update_alert():
     if request.method == "POST":
-        bank_buy = request.form["bank_buy"]
         bank_sell = request.form["bank_sell"]
+        bank_buy = request.form["bank_buy"]
         currency = request.form["currency"]
-        All_alert.update_user_alert(session["email"], currency, [bank_buy, bank_sell])
+        All_alert.update_user_alert(session["email"], currency, [bank_sell, bank_buy])
         return redirect("/cash_alert")
 
 @app.route("/delete_alert", methods=["POST"])
@@ -51,7 +56,7 @@ def new_alert():
             buy_rate = request.form['buy_rate']
             sell_rate = request.form['sell_rate']
 
-            result = All_alert.create_alert(session['email'], input_currency, [buy_rate, sell_rate])
+            result = All_alert.create_alert(session['email'], input_currency, [sell_rate, buy_rate])
             if result is True:
                 message = "Wow! Reminder added successfully!"
                 currency_msg = "Currency Type: {}".format(input_currency)

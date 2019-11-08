@@ -10,18 +10,19 @@
           <form action="/update_alert", method="post">
            <h3 class="card-title" style="color: darkred;">{{a.currency}}</h3>
            <input type="hidden" name="currency" value="{{a.currency}}">
+              <div class="form-group row">
+             <label for="bank_sell" class="col-5 col-form-label" style="color: black;">Sell Rate:</label>
+              <div class="col-7">
+                    <input class="form-control form-input" type="tel" id="bank_sell" name="bank_sell" pattern="\d+\.?\d*" required="required" placeholder="{{a.price[1]}}">
+                </div>
+          </div>
           <div class="form-group row">
              <label for="bank_buy" class="col-5 col-form-label" style="color: black;">Buy Rate:</label>
               <div class="col-7">
                     <input class="form-control form-input" type="tel" id="bank_buy" name="bank_buy" pattern="\d+\.?\d*" required="required" placeholder="{{a.price[0]}}">
                 </div>
           </div>
-          <div class="form-group row">
-             <label for="bank_sell" class="col-5 col-form-label" style="color: black;">Sell Rate:</label>
-              <div class="col-7">
-                    <input class="form-control form-input" type="tel" id="bank_sell" name="bank_sell" pattern="\d+\.?\d*" required="required" placeholder="{{a.price[1]}}">
-                </div>
-          </div>
+
 
     <button type = "submit" class="btn btn-primary btn-update">Update</button>
 

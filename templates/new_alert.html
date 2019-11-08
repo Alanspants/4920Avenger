@@ -13,7 +13,11 @@
     <small id="price_remind" class="form-text text-muted">You can add buy and sell rates here:)</small>
   </div>
 
-
+      <div class="form-group">
+    <label for="sell_rate">Sell Rate</label>
+    <input type="text" class="form-control" id="sell_rate" name="sell_rate" required="required" pattern="\d+\.?\d*" aria-describedby="sellHelp" placeholder="Enter rate">
+    <small id="sellHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
+  </div>
 
     <div class="form-group">
     <label for="buy_rate">Buy Rate</label>
@@ -21,11 +25,7 @@
     <small id="buyHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
   </div>
 
-      <div class="form-group">
-    <label for="sell_rate">Sell Rate</label>
-    <input type="text" class="form-control" id="sell_rate" name="sell_rate" required="required" pattern="\d+\.?\d*" aria-describedby="sellHelp" placeholder="Enter rate">
-    <small id="sellHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
-  </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
   <p align="left">{{message}}</p>
   <p align="left">{{currency_msg}}</p>
