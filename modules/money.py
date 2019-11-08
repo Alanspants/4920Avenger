@@ -28,12 +28,12 @@ class Money(object):
 #http://www.ezybonds.com/exchange.asp
 
 '''
-test
-moneydict, position = Money.search_data()
-
-for i in range(0, 42):
-    print(moneydict[i].currency)
-    print(moneydict[i].code)
-    print(moneydict[i].sell_rate)
-    print(moneydict[i].buy_rate)
+# test
+# moneydict, position = Money.search_data()
+# 
+# for i in range(0, 42):
+#     print(moneydict[i].currency)
+#     print(moneydict[i].code)
+#     print(moneydict[i].sell_rate)
+#     print(moneydict[i].buy_rate)
 '''

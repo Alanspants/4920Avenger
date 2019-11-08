@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, redirect, session
 from modules.job_check import check_alert
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.money import Money
-from modules.user import  User
+from modules.user import User
 from modules.database import Database
 from modules.All_alert import All_alert
+import datetime
 app = Flask(__name__)
 app.secret_key = "123123123"
 
@@ -14,8 +15,11 @@ def initialize():
     session["email"] = session.get("email")
     session["name"] = session.get("name")
     # work = BackgroundScheduler(check_alert, "cron", day_of_week="0-4", hour="16", miniute="30")
-    work = BackgroundScheduler(check_alert, "interval", seconds=10)
-    work.add_job()
+    work = BackgroundScheduler()
+
+    # Scheduler.add_job(check_alert, "interval", seconds=10)
+    work.add_job(check_alert, "interval", seconds=10)
+    # Scheduler.add_job(check_alert, "cron", day_of_week="0-4", hour="18",minute="1")
     work.start()
 
 @app.route("/")
