@@ -1,5 +1,5 @@
-from modules.money import Money
-from modules.database import Database
+from backends.money import Money
+from backends.database import Database
 import requests
 
 def check_alert():

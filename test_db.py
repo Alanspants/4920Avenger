@@ -1,4 +1,4 @@
-from modules.database import Database
+from backends.database import Database
 
 Database.initialize()
 

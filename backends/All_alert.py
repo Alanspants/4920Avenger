@@ -1,4 +1,4 @@
-from modules.database import Database
+from backends.database import Database
 from passlib.hash import pbkdf2_sha512
 
 class All_alert(object):
