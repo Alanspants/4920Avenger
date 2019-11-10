@@ -1,18 +1,17 @@
+
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Cover Template · Bootstrap</title>
+    <title>iCurrency</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/cover/">
 
     <!-- Bootstrap core CSS -->
-    <!--<link href="/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-    {% include "html_reference.html" %}
+    {% include "html_refrence.html" %}
 
     <style>
       .bd-placeholder-img {
@@ -29,107 +28,69 @@
           font-size: 3.5rem;
         }
       }
-
-
-
-
-
-
-
-
-
-
     </style>
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
-</head>
-<body class="text">
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+  </head>
+  <body class="site-wrapper">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-        <header class="masthead mb-auto">
-            <div class="inner">
-                {% if session['email'] %}
-                <center><h3 class="title">Welcome {{session['name']}}.</h3></center>
-                {% endif %}
-                {% if not session['email'] %}
-                <center><h3 class="title">Welcome tourist.</h3></center>
-                {% endif %}
-                <!--                <nav class="nav nav-masthead justify-content-center">-->
-                <!--                    {% if not session['email'] %}-->
-                <!--                    <a class="nav-link active" href="/register">Register</a>-->
-                <!--                    <a class="nav-link" href="/login">Login</a>-->
-                <!--                    {% endif %}-->
-                <!--                    {% if session['email'] %}-->
-                <!--                    <a class="nav-link" href="/">Home</a>-->
-                <!--                    <a class="nav-link" href="/new_alert">New Alert</a>-->
-                <!--                    <a class="nav-link" href="/cash_alert">Cash Alert</a>-->
-                <!--                    <a class="nav-link" href="/sign_alert">Sign Alert</a>-->
-                <!--                    <a class="nav-link" href="/change_email">Change Email</a>-->
-                <!--                    <a class="nav-link" href="/logout">Logout</a>-->
-                <!--                    {% endif %}-->
-                <!--                </nav>-->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Account
-                    </button>
-                    <div class="dropdown-menu">
-                        {% if session['email'] %}
-                        <a class="dropdown-item" href="#">{{session['email']}}</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/change_email">Change Email</a>
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                        {% endif %}
-                        {% if not session['email'] %}
-                        <a class="dropdown-item" href="/register">Register</a>
-                        <a class="dropdown-item" href="/login">Login</a>
-                        {% endif %}
-                    </div>
-                </div>
-                {% if session['email'] %}
-                <div class="btn-group">
-                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Notification
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/new_alert">New Notification</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/cash_alert">Cash rate</a>
-                        <a class="dropdown-item" href="/sign_alert">Sign rate</a>
-                    </div>
+  <header class="masthead mb-auto">
+    <div class="inner" style="position: relative">
+      <h3 class="title">iCurrency</h3>
 
-                </div>
-                <div class="btn-group">
-                    <button type="button"  class="btn btn-info btn-home">
-                        <a href="/">Home</a>
-                    </button>
+      <button type="button" class="btn btn-info"><a href="/">Home</a></button>
+      {% if not session['email']%}
+      <button type="button" class="btn btn-info"><a href="/register">Register</a></button>
+      <button type="button" class="btn btn-info"><a href="/login">Login</a></button>
 
-                </div>
-                {% endif %}
-            </div>
-        </header>
+      {% endif %}
 
-        <!--  <main role="main" class="inner cover">-->
-        <!--    <h1 class="cover-heading">Cover your page.</h1>-->
-        <!--    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>-->
-        <!--    <p class="lead">-->
-        <!--      <a href="#" class="btn btn-lg btn-secondary">Learn more</a>-->
-        <!--    </p>-->
-        <!--  </main>-->
 
-        {% block content %}
+      {% if session['email']%}
+
+      <div class="btn-group">
+      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+          Account
+      </button>
+      <div class="dropdown-menu">
+          <a class="dropdown-item">{{session['email']}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/change_email">Change Email</a>
+          <a class="dropdown-item" href="/logout">Logout</a>
+      </div>
+  </div>
+  <div class="btn-group">
+      <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+          Reminder
+      </button>
+      <div class="dropdown-menu">
+          <a class="dropdown-item" href="/create_reminder">Create Reminder</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/reminders">Reminder List</a>
+      </div>
+  </div>
+  {% endif %}
+      <!-- Search form -->
+<form class="form-inline active-purple-4">
+  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+    aria-label="Search">
+  <i class="fas fa-search" aria-hidden="true"></i>
+</form>
+
+      </nav>
+    </div>
+  </header>
+  {% block content%}
 
         {% endblock %}
-
-        <footer class="mastfoot mt-auto">
-            <div class="inner">
-                <p>Create by <a
-                        href="">@Avengers </a>.</p>
-            </div>
-        </footer>
+  <footer class="mastfoot mt-auto">
+    <div class="inner">
+      <p align="center">Avengers Group</p>
     </div>
+  </footer>
 </div>
 </body>
 </html>
-

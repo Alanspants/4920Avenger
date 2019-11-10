@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content%}
+<form action="/change_email" method="post" novalidate="novalidate">
+    <div class="form-group">
+        <label for="newEmail">New Email address</label>
+        <input type="email" class="form-control" id="newEmail" name="newEmail" aria-describedby="emailHelp"
+               placeholder="New Email address" required="required">
+        <small id="emailHelp" class="form-text text-muted">We'll send notifications to your new email</small>
+    </div>
+    <div class="form-group">
+        <label for="passwordIn">Password</label>
+        <input type="password" class="form-control" id="passwordIn" name="passwordIn" placeholder="Password" required="required">
+    </div>
 
-<form action="/change_email" method="post">
-    <div class="form-group">
-        <label for="InputNewEmail">New Email Address</label>
-        <input type="email" class="form-control" id="InputNewEmail" name="InputNewEmail" placeholder="Enter New Email"
-               required="required">
-    </div>
-    <div class="form-group">
-        <label for="InputPassword">Password</label>
-        <input type="password" class="form-control" id="InputPassword" name="InputPassword" placeholder="Enter Password"
-               required="required">
-    </div>
-    <p>{{message}}</p>
+    <p>{{notification}}</p>
     <button type="submit" class="btn btn-primary">Update</button>
+
 </form>
 
 {% endblock %}
