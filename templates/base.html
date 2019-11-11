@@ -40,15 +40,12 @@
       <h3 class="title">iCurrency</h3>
 
       <button type="button" class="btn btn-info"><a href="/">Home</a></button>
+        <button type="button" class="btn btn-danger"><a href="/calculator">Calculator</a></button>
       {% if not session['email']%}
       <button type="button" class="btn btn-info"><a href="/register">Register</a></button>
       <button type="button" class="btn btn-info"><a href="/login">Login</a></button>
-
       {% endif %}
-
-
       {% if session['email']%}
-
       <div class="btn-group">
       <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
