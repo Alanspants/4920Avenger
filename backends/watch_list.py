@@ -31,3 +31,11 @@ class WatchList(object):
     @staticmethod
     def delete_watchList(email, code):
         Database.delete_record(document="preference", old={"email": email, "code": code})
+
+    @staticmethod
+    def collect_codes(dict):
+        collection = []
+        for p in dict:
+            collection.append(p['code'])
+
+        return collection

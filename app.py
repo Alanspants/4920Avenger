@@ -38,13 +38,15 @@ def setup():
 @app.route("/")
 def home():
     currencylist, pos = Source.get_currency()
-    
+    watchlist = WatchList.get_watch_list(session['email'])
+    codes = WatchList.collect_codes(watchlist)
+
     if request.method == 'POST':
         code = request.form['history']
         print(code)
         return render_template('search.html')
-    
-    return render_template('home.html', currencylist=currencylist, result=False)
+
+    return render_template('home.html', currencylist=currencylist, codes=codes)
 
 
 @app.route("/reminders")
@@ -204,8 +206,10 @@ def watchlist():
 def add_watchlist(currency, code, sell_rate, buy_rate):
     currencylist, pos = Source.get_currency()
     if session['email']:
-        result = WatchList.new_watchList(session['email'], currency, code, sell_rate, buy_rate)
-        return render_template("home.html", result=result, currencylist=currencylist)
+        WatchList.new_watchList(session['email'], currency, code, sell_rate, buy_rate)
+        watchlist = WatchList.get_watch_list(session['email'])
+        codes = WatchList.collect_codes(watchlist)
+        return render_template("home.html", codes=codes, currencylist=currencylist)
     else:
         return redirect("/login")
 
@@ -215,6 +219,17 @@ def remove_watchlist(code):
         WatchList.delete_watchList(session['email'], code)
         find = WatchList.get_watch_list(session['email'])
         return render_template("watchlist.html", find=find)
+    else:
+        return redirect("/login")
+
+@app.route("/change_preference:<code>")
+def change_preference(code):
+    currencylist, pos = Source.get_currency()
+    if session['email']:
+        WatchList.delete_watchList(session['email'], code)
+        watchlist = WatchList.get_watch_list(session['email'])
+        codes = WatchList.collect_codes(watchlist)
+        return render_template("home.html", codes=codes, currencylist=currencylist)
     else:
         return redirect("/login")
 
@@ -264,6 +279,12 @@ def change_password():
             return render_template("change_password.html")
     else:
         return redirect("/login")
+
+@app.route("/profile")
+def profile():
+    # email = session["email"]
+    # name = session["name"]
+    return render_template('profile.html')
 
 if __name__ == "__main__":
     app.run()

@@ -1,15 +1,19 @@
 {% extends "base.html"%}
 
 {% block content%}
+<!-- Search form -->
 
   <table class="table">
     <thead class="thead-light">  <thead>
-    <tr>  
+    <tr>
       <th class="text-white">Currency</th>
       <th class="text-white">Code</th>
       <th class="text-white">Sell Rate</th>
       <th class="text-white">Buy Rate</th>
+      {% if session['email']%}
+
       <th class="text-white">add to watchlist</th>
+      {% endif %}
       <th class="text-white">history trend</th>
     </tr>
   </thead>
@@ -21,14 +25,16 @@
       <td>{{currencylist[position].code}}</td>
       <td>{{currencylist[position].sell_rate}}</td>
       <td>{{currencylist[position].buy_rate}}</td>
-      <td><a href="{{url_for('add_watchlist', currency=currencylist[position].currency, code=currencylist[position].code, sell_rate=currencylist[position].sell_rate, buy_rate=currencylist[position].buy_rate)}}"><input onclick="change(id)" type="button" value="add" id="{{position}}" class="btn btn-info"></input></a></td>
+      {% if session['email']%}
+
+      {% if currencylist[position].code in codes %}
+        <td><a href="{{url_for('change_preference', code=currencylist[position].code)}}"><button type="button" class="btn btn-info">added</button></a></td>
+      {% else %}
+        <td><a href="{{url_for('add_watchlist', currency=currencylist[position].currency, code=currencylist[position].code, sell_rate=currencylist[position].sell_rate, buy_rate=currencylist[position].buy_rate)}}"><button type="button" class="btn btn-info">add</button></a></td>
+      {% endif %}
+      {% endif %}
       <td><a href="{{url_for('history', code=currencylist[position].code)}}"><button type="button" class="btn btn-info">history</button></a></td>
     </tr>
-    <script>
-        function change(position) {
-          document.getElementById(position).value = "added"
-        }
-    </script>  
   {% endfor %}
   </form>
   </tbody>

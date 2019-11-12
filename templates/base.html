@@ -52,7 +52,7 @@
           Account
       </button>
       <div class="dropdown-menu">
-          <a class="dropdown-item">{{session['email']}}</a>
+          <a class="dropdown-item" href="/profile">Profile</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/change_email">Change Email</a>
           <a class="dropdown-item" href="/change_password">Change Password</a>
@@ -77,7 +77,16 @@
   
   {% endif %}
       <!-- Search form -->
-<form class="input-group md-form form-sm form-2 pl-0" action="/search" method="post">
+<script>
+function validateForm() {
+  var x = document.forms["search_form"]["search"].value;
+  if (x == "" || x == null) {
+    alert("Currency must be filled out");
+    return false;
+  }
+}
+</script>
+<form name="search_form" class="input-group md-form form-sm form-2 pl-0" action="/search" onsubmit="return validateForm()" method="post" required="required">
   <input class="form-control my-0 py-1 lime-border" type="text" id="search" name="search" placeholder="Input currency...then press enter..."
     aria-label="Search" list="codes">
     <datalist id="codes">
