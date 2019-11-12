@@ -40,15 +40,12 @@
       <h3 class="title">iCurrency</h3>
 
       <button type="button" class="btn btn-info"><a href="/">Home</a></button>
+        <button type="button" class="btn btn-danger"><a href="/calculator">Calculator</a></button>
       {% if not session['email']%}
       <button type="button" class="btn btn-info"><a href="/register">Register</a></button>
       <button type="button" class="btn btn-info"><a href="/login">Login</a></button>
-
       {% endif %}
-
-
       {% if session['email']%}
-
       <div class="btn-group">
       <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
@@ -58,6 +55,8 @@
           <a class="dropdown-item">{{session['email']}}</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/change_email">Change Email</a>
+          <a class="dropdown-item" href="/change_password">Change Password</a>
+
           <a class="dropdown-item" href="/logout">Logout</a>
       </div>
   </div>
@@ -72,13 +71,72 @@
           <a class="dropdown-item" href="/reminders">Reminder List</a>
       </div>
   </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-info"><a href="/watchlist">Watchlist</a></button>
+</div>
+  
   {% endif %}
       <!-- Search form -->
-<form class="form-inline active-purple-4">
-  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-    aria-label="Search">
-  <i class="fas fa-search" aria-hidden="true"></i>
+<form class="input-group md-form form-sm form-2 pl-0" action="/search" method="post">
+  <input class="form-control my-0 py-1 lime-border" type="text" id="search" name="search" placeholder="Input currency...then press enter..."
+    aria-label="Search" list="codes">
+    <datalist id="codes">
+  <option value="AED UNITED ARAB EMIRATES DIRHAM">
+  <option value="BND BRUNEI DOLLAR">
+  <option value="BRL BRAZILIAN REAL">
+  <option value="CAD CANADIAN DOLLAR">
+  <option value="CHF SWISS FRANC">
+  <option value="CNY CHINESE YUAN">
+  <option value="CZK CZECH REPUBLIC KORUNA">
+  <option value="DKK DANISH KRONE">
+  <option value="EGP EGYPTIAN POUND">
+  <option value="EUR EURO">
+  <option value="FJD FIJI DOLLAR">
+  <option value="GBP UK - BRITISH POUND">
+  <option value="HKD HONG KONG DOLLAR">
+  <option value="HRK CROATIAN KUNA">
+  <option value="HUF HUNGARIAN FORINT">
+  <option value="IDR INDONESIAN RUPIAH">
+  <option value="ILS ISRAELI SHEKEL">
+  <option value="INR INDIAN RUPEE">
+  <option value="ISK ICELANDIC KRONE">
+  <option value="JPY JAPANESE YEN">
+  <option value="KRW KOREAN WON">
+  <option value="LKR SRI LANKAN RUPEE">
+  <option value="MXN MEXICAN PESO">
+  <option value="MYR MALAYSIAN RINGGIT">
+  <option value="NOK NORWEGIAN KRONE">
+  <option value="NZD NEW ZEALAND DOLLAR">
+  <option value="PGK PAPUA NEW GUINEA KINA">
+  <option value="PHP PHILIPPINE PESO">
+  <option value="PLN POLISH ZLOTY">
+  <option value="RUB RUSSIAN RUBLE">
+  <option value="SBD SOLOMON ISLAND DOLLAR">
+  <option value="SEK SWEDISH KRONE">
+  <option value="SGD SINGAPORE DOLLAR">
+  <option value="THB THAI BAHT">
+  <option value="TOP TONGAN PA'ANGA">
+  <option value="TRY TURKISH LIRA">
+  <option value="TWD TAIWANESE DOLLAR">
+
+  <option value="USD UNITED STATES DOLLAR">
+  <option value="VND VIETNAMESE DONG">
+  <option value="VUV VANUATU VATU">
+  <option value="WST WEST SAMOAN TALA">
+  <option value="XPF FRENCH PACIFIC FRANC">
+
+
+
+  </option>
+
+</datalist>
+    <i class="fas fa-search" aria-hidden="true"></i>
+
 </form>
+
+
+
+
 
       </nav>
     </div>

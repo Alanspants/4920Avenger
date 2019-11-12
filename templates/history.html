@@ -1,0 +1,69 @@
+{% extends "base.html"%}
+{% block content%}
+ {{code}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<body>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
+  <script>
+      let myChart = document.getElementById('myChart').getContext('2d');
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+var today = new Date();
+var date = today.getDate()+'/' + (today.getMonth()+1) + '/' + today.getFullYear();
+dataall = []
+for(i=0;i<30;i++){
+  dataall.push()
+}
+console.log(dataall)
+label_all = ['Jan', 'Feb', 'March', 'April', 'May', 'June'];
+data_all = ["3.2","2.8","3.2","3.5","3.3","3.5"];
+title = "Exchange Rate over last half year"
+
+let massPopChart = new Chart(myChart, {
+  type:'line',
+  data:{
+    labels:label_all,
+    datasets:[{
+      label:'Exchange rate',
+      data: data_all,
+      //backgroundColor:'green',
+      borderColor:'#768',
+    }]
+  },
+  options:{
+    title:{
+      display:true,
+      text:title,
+      fontSize:25
+    },
+    legend:{
+      display:true,
+      position:'right',
+      labels:{
+        fontColor:'#000'
+      }
+    },
+    layout:{
+      padding:{
+        left:0,
+        right:400,
+        bottom:100,
+        top:0
+      }
+    },
+    tooltips:{
+      enabled:true
+    }
+  }
+});
+  </script>
+</body>
+
+
+{% endblock %}

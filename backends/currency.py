@@ -23,8 +23,16 @@ class Source(object):
             currencypos[currency_name.values[pos]] = pos
             elements = data.values[pos]
             currencylist[pos] = Source(elements[0], elements[1], elements[2], elements[3])
+        currencypos["AUD"] = 43
+        currencylist[43] = Source("AUSTRALIAN DOLLAR","AUD","1","1")
         return currencylist, currencypos
 #http://www.ezybonds.com/exchange.asp
+
+#test
+# currencylist, currencypos = Source.get_currency()
+# print(currencylist[currencypos['AED']].sell_rate)
+
+
 
 '''
 # test

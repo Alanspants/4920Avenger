@@ -47,5 +47,14 @@ class User(object):
             return False
         return True
 
+    @staticmethod
+    def update_user_by_password(old, new):
+        Database.update_record(document="users", new_record={"password": old}, new_query={"$set": {"password": User.encode_password(new)}})
 
+
+
+    @staticmethod
+    def getPassword(email):
+        user = Database.match(document="users", new_record={"email": email})
+        return user["password"]
 

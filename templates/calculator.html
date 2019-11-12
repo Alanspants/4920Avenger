@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="/calculator" method="post">
+    <script>
+            function getCurrency(){
+                var from = document.getElementById("from").value
+                var to = document.getElementById("to").value
+                var fromAmount = document.getElementById("fromAmount").value
+                document.getElementById("fCurrency").value = from
+                document.getElementById("tCurrency").value = to
+                document.getElementById("fAmount").value = fromAmount
+                console.log(from + to + fromAmount)
+            }
+            function click(){
+                console.log("100")
+            }
+    </script>
+
+
+    <body>
+    <div id="box" style="margin-bottom: 20rem;">
+
+
+        {% if flag == 0 %}
+        <medium id="s1" class="form-text text-muted">1 USD equals</medium>
+        <h2>{{initial_result}} AUD</h2>
+        <table>
+            <tr>
+                <td><input id="fromAmount" name="fromAmount" type="text" onkeyup="getCurrency();" value="1"></td>
+                <td>
+                    <select id="from" name="from">
+                        <option value="AUD">(AUD) AUSTRALIS DOLLAR</option>
+                        {% for position in range(0, 37) %}
+                        <option value="{{currencylist[position].code}}">({{currencylist[position].code}})
+                            {{currencylist[position].currency}}
+                        </option>
+                        {% endfor%}
+
+                        <option value="USD" selected>(USD) UNITED STATES DOLLAR</option>
+
+                        {% for position in range(38, 42) %}
+                        <option value="{{currencylist[position].code}}">({{currencylist[position].code}})
+                            {{currencylist[position].currency}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input id="toAmount" name='toAmount' type="text" disabled value="{{initial_result}}"></td>
+                <td>
+                    <select id="to" name="to">
+                        <option value="AUD" selected>(AUD) AUSTRALIS DOLLAR</option>
+                        {% for position in range(0, 42)%}
+                        <option value="{{currencylist[position].code}}">({{currencylist[position].code}})
+                            {{currencylist[position].currency}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                </td>
+            </tr>
+        </table>
+        {% else %}
+        <medium id="s2" class="form-text text-muted">1 {{currencylist[from_position].code}} equals</medium>
+        <h2>{{temp_to_Amount}} {{currencylist[to_position].code}}</h2>
+        <table>
+            <tr>
+                <td><input id="fromAmount1" name="fromAmount" type="text" onkeyup="getCurrency();"
+                           value="{{from_Amount}}"></td>
+                <td>
+                    <select id="from1" name="from">
+                        <option value="{{currencylist[from_position].code}}" selected>
+                            ({{currencylist[from_position].code}})
+                            {{currencylist[from_position].currency}}
+                        </option>
+                        {% for position in range(0, 42)%}
+                        <option value="{{currencylist[position].code}}">({{currencylist[position].code}})
+                            {{currencylist[position].currency}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input id="toAmount1" name="toAmount" type="text" onkeyup="getCurrency();"
+                           value="{{to_Amount}}" disabled></td>
+                <td>
+                    <select id="to1" name="to">
+                        <option value="{{currencylist[to_position].code}}" selected>
+                            ({{currencylist[to_position].code}})
+                            {{currencylist[to_position].currency}}
+                        </option>
+                        {% for position in range(0, 42)%}
+                        <option value="{{currencylist[position].code}}">({{currencylist[position].code}})
+                            {{currencylist[position].currency}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                </td>
+            </tr>
+        </table>
+        {% endif %}
+
+        <button type="submit" name="submit" class="btn btn-primary" value="A" onclick="click();">Submit</button>
+
+    </div>
+    </body>
+    <div id="fCurrency" name="fCurrency" value=""></div>
+    <div id="tCurrency" name="tCurrency" value=""></div>
+    <div id="fAmount" name="fAmount" value=""></div>
+    <div id="tAmount" name="tAmount" value=""></div>
+
+</form>
+{% endblock %}

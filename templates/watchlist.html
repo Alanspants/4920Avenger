@@ -1,0 +1,32 @@
+{% extends "base.html"%}
+
+{% block content%}
+<!-- Search form -->
+<form method='POST' class="form-inline active-purple-4">
+  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" name="searchInfo"
+    aria-label="Search">
+  <i class="fas fa-search" aria-hidden="true"></i>
+</form>
+  <table class="table">
+    <thead class="thead-light">  <thead>
+    <tr>
+      <th class="text-white">Currency</th>
+      <th class="text-white">Code</th>
+      <th class="text-white">Sell Rate</th>
+      <th class="text-white">Buy Rate</th>
+      <th class="text-white">remove from watchlist</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for a in find %}
+        <tr class="text-white">
+          <td>{{a.currency}}</td>
+          <td>{{a.code}}</td>
+          <td>{{a.sell_rate}}</td>
+          <td>{{a.buy_rate}}</td>
+          <td><a href="{{url_for('remove_watchlist', code=a.code)}}"><button type="button" class="btn btn-info">remove</button></a></td>
+        </tr>
+      {% endfor %}
+</tbody>
+</table>
+{% endblock %}
