@@ -1,0 +1,87 @@
+{% extends "base.html"%}
+{% block content%}
+  <div class="{{code}}" id="chart"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<body>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
+  <script>
+      let myChart = document.getElementById('myChart').getContext('2d');
+      // Global Options
+      Chart.defaults.global.defaultFontFamily = 'Lato';
+      Chart.defaults.global.defaultFontSize = 18;
+      Chart.defaults.global.defaultFontColor = '#777';
+
+      var code = document.getElementById('chart').className
+      var url= 'http://127.0.0.1:5001/data/'
+      url = url.concat(code)
+      fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        label_all = [];
+        data_all = [];
+        for(var i=0; i<30;i++){
+            if(!data.hasOwnProperty(i)){
+                continue;
+            }
+          label_all.unshift(data[i]["date"])
+          data_all.push(data[i]["value"])
+        }
+        title = data.code
+        title = title.concat(" trend over last 30 days")
+
+      let massPopChart = new Chart(myChart, {
+      type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data:{
+        labels:label_all,
+        datasets:[{
+          label:'Exchange rate',
+          data:data_all,
+          backgroundColor:'#B1EFFE',
+          borderWidth:1.2,
+          borderColor:'#777',
+          hoverBorderWidth:3,
+          hoverBorderColor:'#000'
+        }]
+      },
+      options:{
+        title:{
+          display:true,
+          text:title,
+          fontSize:25,
+          fontColor:'#120202'
+        },
+        legend:{
+          display:true,
+          position:'right',
+          labels:{
+            fontColor:'#130202'
+          }
+        },
+        layout:{
+          padding:{
+            left:0,
+            right:400,
+            bottom:0,
+            top:50
+          }
+        },
+        tooltips:{
+          enabled:true
+        }
+      }
+    });
+            
+
+      })
+
+
+      
+      
+        </script>
+      </body>
+
+
+{% endblock %}

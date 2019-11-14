@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, request, render_template, session, redirect,jsonify
 from backends.database import Database as db
 from backends.email_send import get_reminder
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -7,6 +7,11 @@ from backends.user import User
 from backends.reminder import Reminder
 from bs4 import BeautifulSoup
 from backends.calculator import convert
+from backends.watch_list import WatchList
+import requests
+import json
+import sys
+from backends.data import getData
 
 soup = BeautifulSoup('calculator.html', 'html.parser')
 import datetime
@@ -20,11 +25,13 @@ app.secret_key = "123123123"
 def setup():
     session["email"] = session.get("email")
     session["name"] = session.get("name")
+    session["password"] = session.get("password")
+
     db.setup()
     # work = BackgroundScheduler(check_alert, "cron", day_of_week="0-4", hour="16", miniute="30")
     work = BackgroundScheduler()
     # work.add_job(check_alert, "interval", seconds=10)
-    work.add_job(get_reminder, "interval", seconds=10000)
+    work.add_job(get_reminder, "interval", seconds=5)
     # work.add_job(check_alert, "cron", day_of_week="0-4", hour="18",minute="1")
     work.start()
 
@@ -32,7 +39,15 @@ def setup():
 @app.route("/")
 def home():
     currencylist, pos = Source.get_currency()
-    return render_template('home.html', currencylist=currencylist)
+    watchlist = WatchList.get_watch_list(session['email'])
+    codes = WatchList.collect_codes(watchlist)
+
+    if request.method == 'POST':
+        code = request.form['history']
+        print(code)
+        return render_template('search.html')
+
+    return render_template('home.html', currencylist=currencylist, codes=codes)
 
 
 @app.route("/reminders")
@@ -180,6 +195,91 @@ def calculator():
         initial_result = convert("USD", "AUD", "1", currencylist, pos)
         return render_template("calculator.html", currencylist=currencylist, flag=0, initial_result=initial_result)
 
+@app.route("/watchlist")
+def watchlist():
+    if session['email']:
+        find = WatchList.get_watch_list(session['email'])
+        return render_template("watchlist.html", find=find)
+    else:
+        return redirect("/login")
+
+@app.route("/add_watchlist:<currency>/<code>/<sell_rate>/<buy_rate>")
+def add_watchlist(currency, code, sell_rate, buy_rate):
+    currencylist, pos = Source.get_currency()
+    if session['email']:
+        WatchList.new_watchList(session['email'], currency, code, sell_rate, buy_rate)
+        watchlist = WatchList.get_watch_list(session['email'])
+        codes = WatchList.collect_codes(watchlist)
+        return render_template("home.html", codes=codes, currencylist=currencylist)
+    else:
+        return redirect("/login")
+
+@app.route("/remove_watchlist:<code>")
+def remove_watchlist(code):
+    if session['email']:
+        WatchList.delete_watchList(session['email'], code)
+        find = WatchList.get_watch_list(session['email'])
+        return render_template("watchlist.html", find=find)
+    else:
+        return redirect("/login")
+
+@app.route("/change_preference:<code>")
+def change_preference(code):
+    currencylist, pos = Source.get_currency()
+    if session['email']:
+        WatchList.delete_watchList(session['email'], code)
+        watchlist = WatchList.get_watch_list(session['email'])
+        codes = WatchList.collect_codes(watchlist)
+        return render_template("home.html", codes=codes, currencylist=currencylist)
+    else:
+        return redirect("/login")
+
+@app.route("/history:<code>", methods=['POST','GET'])
+def history(code):
+    data(code)
+    return render_template('history.html', code=code)
+
+
+@app.route("/data/<code>", methods=['POST','GET'])
+def data(code):
+    data = getData(code)
+    return data
+
+
+@app.route("/search", methods=['POST','GET'])
+def search():
+    # currencylist, pos = Source.get_currency()
+    if request.method == 'POST':
+        name = request.form["search"]
+        name = name[0:3]
+        return history(name)
+
+
+@app.route("/change_password", methods=['GET', 'POST'])
+def change_password():
+    if session['email']:
+        if request.method == 'POST':
+            new = request.form['new_password']
+            old = request.form['passwordIn']
+
+            result = User.validation(session['email'], old)
+            if result is not True:
+                notification = "Oops! The password may be wrong! Please try agin!"
+                return render_template("change_password.html", notification=notification)
+            else:
+                User.update_user_by_password(User.getPassword(session['email']), new)
+                notification = "Your new password is reset"
+                return render_template("change_password.html", notification=notification)
+        else:
+            return render_template("change_password.html")
+    else:
+        return redirect("/login")
+
+@app.route("/profile")
+def profile():
+    # email = session["email"]
+    # name = session["name"]
+    return render_template('profile.html')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5001)
