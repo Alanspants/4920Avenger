@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+
+{% block content%}
+
+<form action="/login" method="post">
+  <div class="form-group row">
+    <label for="emailIn">Email address</label>
+    <input type="email" class="form-control" id="emailIn" name="emailIn" aria-describedby="emailHelp" name="InputEmail" placeholder="Enter your email" required="required">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group row">
+    <label for="passwordIn">Password</label>
+    <input type="password" class="form-control" id="passwordIn" name="passwordIn" placeholder="Enter your password" required="required">
+  </div>
+    <a href="/register">Register</a>
+    <p>{{notification}}</p>
+
+  <button type="submit" class="btn btn-primary">Log in</button>
+</form>
+{% endblock %}
