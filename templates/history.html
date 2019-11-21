@@ -1,39 +1,117 @@
-{% extends "base.html"%}
-{% block content%}
+{% extends "base.html" %}
+{% block content %}
+
+<html lang="en" style="background-color: white">
   <div class="{{code}}" id="chart"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <body>
+<!--    <td><a href="{{url_for('home')}}"><button type="text" class="btn btn-info">back</button></a></td>-->
   <div class="container">
+    <canvas id="Chart7"></canvas>
+    <div id="analysis7"></div>
     <canvas id="myChart"></canvas>
+    <div id="analysis30"></div>
+
   </div>
   <script>
       let myChart = document.getElementById('myChart').getContext('2d');
+      let Chart7 = document.getElementById('Chart7').getContext('2d');
       // Global Options
       Chart.defaults.global.defaultFontFamily = 'Lato';
       Chart.defaults.global.defaultFontSize = 18;
       Chart.defaults.global.defaultFontColor = '#777';
 
       var code = document.getElementById('chart').className
-      var url= 'http://127.0.0.1:5001/data/'
+      var url= 'http://127.0.0.1:5000/data/'
       url = url.concat(code)
       fetch(url)
       .then(res => res.json())
       .then(data => {
         label_all = [];
         data_all = [];
+        var j = 0;
+        data7 = []
+        label7 = []
         for(var i=0; i<30;i++){
             if(!data.hasOwnProperty(i)){
                 continue;
             }
+          if(j < 7){
+            label7.unshift(data[i]["date"])
+            data7.push(data[i]["value"])
+            j ++;
+          }
           label_all.unshift(data[i]["date"])
           data_all.push(data[i]["value"])
         }
-        title = data.code
-        title = title.concat(" trend over last 30 days")
+        var maxIndex7 = data7.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        var minIndex7 = data7.reduce((iMin, x, i, arr) => x < arr[iMin] ? i : iMin, 0);
+        var text = "Highest value: ";
+        var average7 = data7.reduce((a,b) => parseFloat(a) + parseFloat(b), 0) / data7.length
+        text = text.concat(data7[maxIndex7]).concat("  Date: ").concat(label7[maxIndex7]).concat(";  Lowest value: ")
+        .concat(data7[minIndex7]).concat("  Date: ").concat(label7[minIndex7]).concat("; Average value: ").concat(average7.toFixed(3))
+
+        document.getElementById("analysis7").innerHTML = text;
+
+        var maxIndex30 = data_all.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        var minIndex30 = data_all.reduce((iMin, x, i, arr) => x < arr[iMin] ? i : iMin, 0);
+        var text = "Highest value: ";
+        var average30 = data_all.reduce((a,b) => parseFloat(a) + parseFloat(b), 0) / data_all.length
+        text = text.concat(data_all[maxIndex30]).concat("  Date: ").concat(label_all[maxIndex30]).concat(";  Lowest value: ")
+        .concat(data_all[minIndex30]).concat("  Date: ").concat(label_all[minIndex30]).concat("; Average value: ").concat(average30.toFixed(3))
+        document.getElementById("analysis30").innerHTML = text
+
+
+        pretitle = data.code
+        title = pretitle.concat(" trend over last 30 days")
+        title7 = pretitle.concat(" trend over last 7 days")
+
+      let chart7 = new Chart(Chart7, {
+      type:'line', 
+      data:{
+        labels:label7,
+        datasets:[{
+          label:'Exchange rate',
+          data:data7,
+          backgroundColor:'#B1EFFE',
+          borderWidth:1.2,
+          borderColor:'#777',
+          hoverBorderWidth:3,
+          hoverBorderColor:'#000'
+        }]
+      },
+      options:{
+        title:{
+          display:true,
+          text:title7,
+          fontSize:40,
+          fontColor:'#120202'
+        },
+        legend:{
+          display:true,
+          position:'right',
+          labels:{
+            fontColor:'#130202'
+          }
+        },
+        layout:{
+          padding:{
+            left:0,
+            right:240,
+            bottom:0,
+            top:50
+          }
+        },
+        tooltips:{
+          enabled:true
+        }
+      }
+    });
+      
 
       let massPopChart = new Chart(myChart, {
-      type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      type:'line', 
       data:{
         labels:label_all,
         datasets:[{
@@ -50,7 +128,7 @@
         title:{
           display:true,
           text:title,
-          fontSize:25,
+          fontSize:40,
           fontColor:'#120202'
         },
         legend:{
@@ -63,9 +141,9 @@
         layout:{
           padding:{
             left:0,
-            right:400,
+            right:240,
             bottom:0,
-            top:50
+            top:100
           }
         },
         tooltips:{
@@ -73,15 +151,11 @@
         }
       }
     });
-            
-
       })
 
-
-      
-      
         </script>
-      </body>
 
+      </body>
+    </html>
 
 {% endblock %}

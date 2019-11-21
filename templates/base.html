@@ -1,7 +1,6 @@
-
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -28,56 +27,60 @@
           font-size: 3.5rem;
         }
       }
+
     </style>
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
 
-  </head>
-  <body class="site-wrapper">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-  <header class="masthead mb-auto">
-    <div class="inner" style="position: relative">
-      <h3 class="title">iCurrency</h3>
+</head>
+<body class="site-wrapper">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner" style="position: relative">
+            <h3 class="title">iCurrency</h3>
 
-      <button type="button" class="btn btn-info"><a href="/">Home</a></button>
-        <button type="button" class="btn btn-danger"><a href="/calculator">Calculator</a></button>
-      {% if not session['email']%}
-      <button type="button" class="btn btn-info"><a href="/register">Register</a></button>
-      <button type="button" class="btn btn-info"><a href="/login">Login</a></button>
-      {% endif %}
-      {% if session['email']%}
-      <div class="btn-group">
-      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-          Account
-      </button>
-      <div class="dropdown-menu">
-          <a class="dropdown-item" href="/profile">Profile</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/change_email">Change Email</a>
-          <a class="dropdown-item" href="/change_password">Change Password</a>
+            <button type="button" class="btn btn-info"><a href="/">Home</a></button>
+            <button type="button" class="btn btn-danger"><a href="/calculator">Calculator</a></button>
+            {% if not session['email']%}
+            <button type="button" class="btn btn-success"><a href="/register">Register</a></button>
+            <button type="button" class="btn btn-warning"><a href="/login">Login</a></button>
+            {% endif %}
+            {% if session['email']%}
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Account
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/profile">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/change_email">Change Email</a>
+                    <a class="dropdown-item" href="/change_password">Change Password</a>
 
-          <a class="dropdown-item" href="/logout">Logout</a>
-      </div>
-  </div>
-  <div class="btn-group">
-      <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-          Reminder
-      </button>
-      <div class="dropdown-menu">
-          <a class="dropdown-item" href="/create_reminder">Create Reminder</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/reminders">Reminder List</a>
-      </div>
-  </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-info"><a href="/watchlist">Watchlist</a></button>
-</div>
-  
-  {% endif %}
-      <!-- Search form -->
-<script>
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Reminder
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/create_reminder">Create Reminder</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/reminders">Reminder List</a>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info"><a href="/watchlist">Watchlist</a></button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary"><a href="/game">Game</a></button>
+            </div>
+
+            {% endif %}
+            <!-- Search form -->
+            <script>
 function validateForm() {
   var x = document.forms["search_form"]["search"].value;
   if (x == "" || x == null) {
@@ -85,79 +88,78 @@ function validateForm() {
     return false;
   }
 }
-</script>
-<form name="search_form" class="input-group md-form form-sm form-2 pl-0" action="/search" onsubmit="return validateForm()" method="post" required="required">
-  <input class="form-control my-0 py-1 lime-border" type="text" id="search" name="search" placeholder="Input currency...then press enter..."
-    aria-label="Search" list="codes">
-    <datalist id="codes">
-  <option value="AED UNITED ARAB EMIRATES DIRHAM">
-  <option value="BND BRUNEI DOLLAR">
-  <option value="BRL BRAZILIAN REAL">
-  <option value="CAD CANADIAN DOLLAR">
-  <option value="CHF SWISS FRANC">
-  <option value="CNY CHINESE YUAN">
-  <option value="CZK CZECH REPUBLIC KORUNA">
-  <option value="DKK DANISH KRONE">
-  <option value="EGP EGYPTIAN POUND">
-  <option value="EUR EURO">
-  <option value="FJD FIJI DOLLAR">
-  <option value="GBP UK - BRITISH POUND">
-  <option value="HKD HONG KONG DOLLAR">
-  <option value="HRK CROATIAN KUNA">
-  <option value="HUF HUNGARIAN FORINT">
-  <option value="IDR INDONESIAN RUPIAH">
-  <option value="ILS ISRAELI SHEKEL">
-  <option value="INR INDIAN RUPEE">
-  <option value="ISK ICELANDIC KRONE">
-  <option value="JPY JAPANESE YEN">
-  <option value="KRW KOREAN WON">
-  <option value="LKR SRI LANKAN RUPEE">
-  <option value="MXN MEXICAN PESO">
-  <option value="MYR MALAYSIAN RINGGIT">
-  <option value="NOK NORWEGIAN KRONE">
-  <option value="NZD NEW ZEALAND DOLLAR">
-  <option value="PGK PAPUA NEW GUINEA KINA">
-  <option value="PHP PHILIPPINE PESO">
-  <option value="PLN POLISH ZLOTY">
-  <option value="RUB RUSSIAN RUBLE">
-  <option value="SBD SOLOMON ISLAND DOLLAR">
-  <option value="SEK SWEDISH KRONE">
-  <option value="SGD SINGAPORE DOLLAR">
-  <option value="THB THAI BAHT">
-  <option value="TOP TONGAN PA'ANGA">
-  <option value="TRY TURKISH LIRA">
-  <option value="TWD TAIWANESE DOLLAR">
 
-  <option value="USD UNITED STATES DOLLAR">
-  <option value="VND VIETNAMESE DONG">
-  <option value="VUV VANUATU VATU">
-  <option value="WST WEST SAMOAN TALA">
-  <option value="XPF FRENCH PACIFIC FRANC">
+            </script>
+            <form name="search_form" class="input-group md-form form-sm form-2 pl-0" action="/search"
+                  onsubmit="return validateForm()" method="post" required="required">
+                <input class="form-control my-0 py-1 lime-border" type="text" id="search" name="search"
+                       placeholder="Input currency...then press enter..."
+                       aria-label="Search" list="codes">
+                <datalist id="codes">
+                    <option value="AED UNITED ARAB EMIRATES DIRHAM">
+                    <option value="BND BRUNEI DOLLAR">
+                    <option value="BRL BRAZILIAN REAL">
+                    <option value="CAD CANADIAN DOLLAR">
+                    <option value="CHF SWISS FRANC">
+                    <option value="CNY CHINESE YUAN">
+                    <option value="CZK CZECH REPUBLIC KORUNA">
+                    <option value="DKK DANISH KRONE">
+                    <option value="EGP EGYPTIAN POUND">
+                    <option value="EUR EURO">
+                    <option value="FJD FIJI DOLLAR">
+                    <option value="GBP UK - BRITISH POUND">
+                    <option value="HKD HONG KONG DOLLAR">
+                    <option value="HRK CROATIAN KUNA">
+                    <option value="HUF HUNGARIAN FORINT">
+                    <option value="IDR INDONESIAN RUPIAH">
+                    <option value="ILS ISRAELI SHEKEL">
+                    <option value="INR INDIAN RUPEE">
+                    <option value="ISK ICELANDIC KRONE">
+                    <option value="JPY JAPANESE YEN">
+                    <option value="KRW KOREAN WON">
+                    <option value="LKR SRI LANKAN RUPEE">
+                    <option value="MXN MEXICAN PESO">
+                    <option value="MYR MALAYSIAN RINGGIT">
+                    <option value="NOK NORWEGIAN KRONE">
+                    <option value="NZD NEW ZEALAND DOLLAR">
+                    <option value="PGK PAPUA NEW GUINEA KINA">
+                    <option value="PHP PHILIPPINE PESO">
+                    <option value="PLN POLISH ZLOTY">
+                    <option value="RUB RUSSIAN RUBLE">
+                    <option value="SBD SOLOMON ISLAND DOLLAR">
+                    <option value="SEK SWEDISH KRONE">
+                    <option value="SGD SINGAPORE DOLLAR">
+                    <option value="THB THAI BAHT">
+                    <option value="TOP TONGAN PA'ANGA">
+                    <option value="TRY TURKISH LIRA">
+                    <option value="TWD TAIWANESE DOLLAR">
 
-
-
-  </option>
-
-</datalist>
-    <i class="fas fa-search" aria-hidden="true"></i>
-
-</form>
+                    <option value="USD UNITED STATES DOLLAR">
+                    <option value="VND VIETNAMESE DONG">
+                    <option value="VUV VANUATU VATU">
+                    <option value="WST WEST SAMOAN TALA">
+                    <option value="XPF FRENCH PACIFIC FRANC">
 
 
+                    </option>
+
+                </datalist>
+                <i class="fas fa-search" aria-hidden="true"></i>
+
+            </form>
 
 
+            </nav>
+        </div>
+    </header>
+    {% block content%}
 
-      </nav>
-    </div>
-  </header>
-  {% block content%}
-
-        {% endblock %}
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
-      <p align="center">Avengers Group</p>
-    </div>
-  </footer>
+    {% endblock %}
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p align="center">Avengers Group</p>
+        </div>
+    </footer>
 </div>
 </body>
 </html>

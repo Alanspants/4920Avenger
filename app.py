@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session, redirect,jsonify
+from flask import Flask, request, render_template, session, redirect, jsonify
 from backends.database import Database as db
 from backends.email_send import get_reminder
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -8,10 +8,13 @@ from backends.reminder import Reminder
 from bs4 import BeautifulSoup
 from backends.calculator import convert
 from backends.watch_list import WatchList
+from backends.game import Game
+from backends.gamer import Gamer
 import requests
 import json
 import sys
 from backends.data import getData
+from backends.rank import rank
 
 soup = BeautifulSoup('calculator.html', 'html.parser')
 import datetime
@@ -20,18 +23,19 @@ app = Flask(__name__)
 # app.config['SECRET_KEY']=os.urandom(24)
 app.secret_key = "123123123"
 
+gamer = Gamer(None, None)
+
 
 @app.before_first_request
 def setup():
     session["email"] = session.get("email")
     session["name"] = session.get("name")
     session["password"] = session.get("password")
-
     db.setup()
     # work = BackgroundScheduler(check_alert, "cron", day_of_week="0-4", hour="16", miniute="30")
     work = BackgroundScheduler()
     # work.add_job(check_alert, "interval", seconds=10)
-    work.add_job(get_reminder, "interval", seconds=5)
+    work.add_job(get_reminder, "interval", seconds=10000000)
     # work.add_job(check_alert, "cron", day_of_week="0-4", hour="18",minute="1")
     work.start()
 
@@ -111,10 +115,14 @@ def create_reminder():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        currencylist, pos = Source.get_currency()
         name = request.form['nameIn']
         email = request.form['emailIn']
         password = request.form['passwordIn']
         result = User.new_user(name, email, password)
+
+        gamer = Gamer.new_gamer(name, email)
+
         if result is not True:
             notification = "Oops! This email may have been registered!"
             return render_template("register.html", notification=notification)
@@ -178,7 +186,7 @@ def calculator():
         fromCurrency = request.form['from']
         toCurrency = request.form['to']
         fromAmount = request.form['fromAmount']
-        #result = fromAmount * 2
+        # result = fromAmount * 2
         # result = convert(fromCurrency, toCurrency, fromAmount, currencylist, pos)
         # if(fromCurrency == "AUD"):
         #     result = convert(-1, toCurrency, fromAmount, currencylist, pos)
@@ -190,10 +198,12 @@ def calculator():
         result = convert(fromCurrency, toCurrency, fromAmount, currencylist, pos)
         result_temp = convert(fromCurrency, toCurrency, 1, currencylist, pos)
         return render_template("calculator.html", currencylist=currencylist, from_position=pos[fromCurrency],
-                               to_position=pos[toCurrency], from_Amount=fromAmount, to_Amount=result, flag=1, temp_to_Amount = result_temp)
+                               to_position=pos[toCurrency], from_Amount=fromAmount, to_Amount=result, flag=1,
+                               temp_to_Amount=result_temp)
     else:
         initial_result = convert("USD", "AUD", "1", currencylist, pos)
         return render_template("calculator.html", currencylist=currencylist, flag=0, initial_result=initial_result)
+
 
 @app.route("/watchlist")
 def watchlist():
@@ -202,6 +212,7 @@ def watchlist():
         return render_template("watchlist.html", find=find)
     else:
         return redirect("/login")
+
 
 @app.route("/add_watchlist:<currency>/<code>/<sell_rate>/<buy_rate>")
 def add_watchlist(currency, code, sell_rate, buy_rate):
@@ -214,6 +225,7 @@ def add_watchlist(currency, code, sell_rate, buy_rate):
     else:
         return redirect("/login")
 
+
 @app.route("/remove_watchlist:<code>")
 def remove_watchlist(code):
     if session['email']:
@@ -222,6 +234,7 @@ def remove_watchlist(code):
         return render_template("watchlist.html", find=find)
     else:
         return redirect("/login")
+
 
 @app.route("/change_preference:<code>")
 def change_preference(code):
@@ -234,19 +247,20 @@ def change_preference(code):
     else:
         return redirect("/login")
 
-@app.route("/history:<code>", methods=['POST','GET'])
+
+@app.route("/history:<code>", methods=['POST', 'GET'])
 def history(code):
     data(code)
     return render_template('history.html', code=code)
 
 
-@app.route("/data/<code>", methods=['POST','GET'])
+@app.route("/data/<code>", methods=['POST', 'GET'])
 def data(code):
     data = getData(code)
     return data
 
 
-@app.route("/search", methods=['POST','GET'])
+@app.route("/search", methods=['POST', 'GET'])
 def search():
     # currencylist, pos = Source.get_currency()
     if request.method == 'POST':
@@ -275,11 +289,43 @@ def change_password():
     else:
         return redirect("/login")
 
+
 @app.route("/profile")
 def profile():
     # email = session["email"]
     # name = session["name"]
     return render_template('profile.html')
 
+
+@app.route("/game", methods=['GET', 'POST'])
+def game():
+    print(session['name'])
+    currencylist, pos = Source.get_currency()
+    availableCurrency = Gamer.get_available_currency(session['name'])
+    if request.method == 'POST':
+        fromCurrency = request.form['from']
+        toCurrency = request.form['to']
+        fromAmount = request.form['fromAmount']
+        result = convert(fromCurrency, toCurrency, fromAmount, currencylist, pos)
+        result_temp = convert(fromCurrency, toCurrency, 1, currencylist, pos)
+        Gamer.update_gameCurrency(session['name'], fromCurrency, toCurrency, fromAmount)
+        availableCurrency = Gamer.get_available_currency(session['name'])
+        message = Gamer.get_message(session['name'])
+        amount = str(Gamer.update_amount(session['name']))
+
+        # return render_template("game.html", currencylist=currencylist, from_position=pos[fromCurrency],
+        #                        to_position=pos[toCurrency], from_Amount=fromAmount, to_Amount=result,
+        #                        temp_to_Amount=result_temp, availableCurrency=availableCurrency,pos=pos)
+        gamer_rank = rank()
+        return render_template("game.html", currencylist=currencylist, availableCurrency=availableCurrency, pos=pos,
+                               message=message, amount=amount, gamer_rank = gamer_rank)
+    else:
+        gamer_rank = rank()
+        message = Gamer.get_message(session['name'])
+        amount = str(Gamer.update_amount(session['name']))
+        return render_template("game.html", currencylist=currencylist, pos=pos, availableCurrency=availableCurrency,
+                               message=message, amount=amount, gamer_rank = gamer_rank)
+
+
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run(port=5000)
