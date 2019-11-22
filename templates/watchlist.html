@@ -10,7 +10,9 @@
       <th class="text-white">Code</th>
       <th class="text-white">Sell Rate</th>
       <th class="text-white">Buy Rate</th>
-      <th class="text-white">remove from watchlist</th>
+      <th class="text-white">Remove_from_watchlist</th>
+      <th class="text-white">History</th>
+
     </tr>
   </thead>
   <tbody>
@@ -20,7 +22,9 @@
           <td>{{a.code}}</td>
           <td>{{a.sell_rate}}</td>
           <td>{{a.buy_rate}}</td>
-          <td><a href="{{url_for('remove_watchlist', code=a.code)}}"><button type="button" class="btn btn-info">remove</button></a></td>
+          <td><a href="{{url_for('remove_watchlist', code=a.code)}}"><button type="button" class="btn btn-outline-warning">Remove</button></a></td>
+          <td><a href="{{url_for('history', code=a.code)}}"><button type="button" class="btn btn-outline-success">History</button></a></td>
+
         </tr>
       {% endfor %}
 </tbody>

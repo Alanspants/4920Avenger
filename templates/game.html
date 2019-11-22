@@ -1,18 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <form action="/game" method="post">
 
 
     <body>
     <div id="box" style="margin-bottom: 20rem;">
+        <p>
 
+            <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample" title="BUTTON">
+                Game Rule
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-block">
+                <p style="color: darkslategrey">This game is used for users to learn more about FX investing</p>
+                <p style="color: darkslategrey">Each user will have a start amount of 1000 AUD</p>
+                <p style="color: darkslategrey">User can transfer AUD from/to any prefered currency</p>
+                <p style="color: darkgoldenrod">(Eg: AUD => CNY, CNY => USD...)</p>
+                <p style="color: darkslategrey">The system will show distribution of each currencies automatically at
+                    any time</p>
+                <p style="color: darkslategrey">There will also show the equivalent amount of AUD</p>
+                <p style="color: darkslategrey">The rank of game is based on the equivalent AUD amount</p>
+                <p style="color: darkgoldenrod">(Higher equivalent amount, higher rank)</p>
+                <p style="color: darkgoldenrod">(Kind reminder: User can set reminders for dream currencies in order to
+                    get higher profits)</p>
+                <p style="color: darkslategrey">Enjoy:)</p>
 
-        <h2>Buy or sell your currency</h2>
+            </div>
+        </div>
+        <h2 style="color: #ffc107">Currency Transfer</h2>
+        <p style="color: lightcoral">(Transfer rule: holding currencies => prefered currencies)</p>
+
         <table>
             <tr>
                 <td><input id="fromAmount" name="fromAmount" type="text" onkeyup="getCurrency();" value="1"
-                           style="width:100px;">
+                           style="width:100px;" pattern="\d+\.?\d*">
 
                     <select id="from" name="from">
                         <!--                        <option value="AUD">(AUD) AUSTRALIS DOLLAR</option>-->
@@ -42,21 +67,50 @@
                         </option>
                         {% endfor%}
                     </select>
-                    <button type="submit" name="submit" class="btn btn-primary">Convert</button>
+                    <button type="submit" name="submit" class="btn btn-warning">Convert</button>
                     <h2></h2>
-                    <h2>Your Currency</h2>
-                    <h5 style="white-space: pre-line;">{{message}}</h5>
-                    <h5>Amount: {{amount}}</h5>
-                    <h2>Rank</h2>
-                    {% for gamer in gamer_rank %}
-                    <h5>{{gamer[0]}} : {{gamer[1]}}</h5>
-                    {% endfor %}
+                    <div class="row">
+
+                        <div class="col-sm-6">
+
+                            <div class="card">
+                                <div class="card-block">
+                                    <h2 class="card-title" style="color: darkgoldenrod">Currency Distribution</h2>
+                                    <p class="card-text">
+                                    <h5 style="white-space: pre-line; color: black">{{message}}</h5>
+                                    <h5 style="color: darkgoldenrod">Equivalent AUD: {{amount}}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+
+                            <div class="card">
+                                <div class="card-block">
+                                    <h2 class="card-title" style="color: darkgoldenrod">Rank List</h2>
+                                    <p class="card-text">
+                                        {% for gamer in gamer_rank %}
+                                        {% if gamer[0] == session['name'] %}
+                                    <h5 style="color: darkgoldenrod">{{gamer[0]}} : {{gamer[1]}}</h5>
+                                    {% else %}
+                                    <h5 style="color: black">{{gamer[0]}} : {{gamer[1]}}</h5>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </td>
 
             </tr>
             <tr>
 
             </tr>
+            <small id="buyHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
+            <p style="color: lightcoral">{{warning}}</p>
         </table>
 
 

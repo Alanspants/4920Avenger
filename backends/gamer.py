@@ -19,6 +19,7 @@ class Gamer(object):
         return self.email
 
     def to_json(self):
+        self.amount = float(round(self.amount, 2))
         return {"name": self.name, "email": self.email, "gameCurrency": self.gameCurrency, "amount": self.amount}
 
     def add_to_database(self):
@@ -72,6 +73,7 @@ class Gamer(object):
         for currency in gamer["gameCurrency"]:
             temp = convert(currency, "AUD", gamer["gameCurrency"][currency], currencylist, pos)
             ans += temp
+        ans = float(round(ans, 2))
         Database.update_record(document="game", new_record={"name": name},
                                new_query={"$set": {"amount": ans}})
         return ans
@@ -84,7 +86,7 @@ class Gamer(object):
         for currency in gamer["gameCurrency"]:
             temp = convert(currency, "AUD", gamer["gameCurrency"][currency], currencylist, pos)
             ans += temp
-
+        ans = float(round(ans, 2))
         return ans
 
 
@@ -94,11 +96,16 @@ class Gamer(object):
         to_amount = convert(from_currency, to_currency, from_amount, currencylist, pos)
         temp_gameCurrency = Gamer.get_gamer_by_name(name)["gameCurrency"]
         temp_gameCurrency[from_currency] = float(temp_gameCurrency[from_currency]) - float(from_amount)
-        temp_gameCurrency[to_currency] = to_amount
+        temp_gameCurrency[to_currency] = float(temp_gameCurrency[to_currency]) + float(to_amount)
+        temp_gameCurrency[from_currency] = float(round(temp_gameCurrency[from_currency], 2))
+        temp_gameCurrency[to_currency] = float(round(temp_gameCurrency[to_currency], 2))
+        if temp_gameCurrency[from_currency] < 0:
+            return 0
         Database.update_record(document="game", new_record={"name": name},
                                new_query={"$set": {"gameCurrency": temp_gameCurrency}})
         print(Gamer.get_gamer_by_name(name)["gameCurrency"])
         Gamer.update_amount(name)
+        return 1
 
     @staticmethod
     def get_available_currency(name):
@@ -119,7 +126,9 @@ class Gamer(object):
         ans = ""
         for currency in gamer["gameCurrency"]:
             if gamer["gameCurrency"][currency] != 0:
-                ans += str(currency) + "   :   " + str(gamer["gameCurrency"][currency]) + "\n"
+                temp = gamer["gameCurrency"][currency]
+                temp = float(round(temp, 2))
+                ans += str(currency) + "   :   " + str(temp) + "\n"
         return ans
 
 

@@ -7,3 +7,4 @@ pymongo==3.9.0
 passlib==1.7.1
 requests==2.22.0
 apscheduler==3.6.3
+alpha-vantage==2.1.2

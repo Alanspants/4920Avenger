@@ -27,7 +27,7 @@
         <h2>{{initial_result}} AUD</h2>
         <table>
             <tr>
-                <td><input id="fromAmount" name="fromAmount" type="text" onkeyup="getCurrency();" value="1"></td>
+                <td><input id="fromAmount" name="fromAmount" type="text" onkeyup="getCurrency();" value="1" pattern="\d+\.?\d*"></td>
                 <td>
                     <select id="from" name="from">
                         <option value="AUD">(AUD) AUSTRALIS DOLLAR</option>
@@ -60,6 +60,7 @@
                     </select>
                 </td>
             </tr>
+            <small id="sellsHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
         </table>
         {% else %}
         <medium id="s2" class="form-text text-muted">1 {{currencylist[from_position].code}} equals</medium>
@@ -67,7 +68,7 @@
         <table>
             <tr>
                 <td><input id="fromAmount1" name="fromAmount" type="text" onkeyup="getCurrency();"
-                           value="{{from_Amount}}"></td>
+                           value="{{from_Amount}}" pattern="\d+\.?\d*"></td>
                 <td>
                     <select id="from1" name="from">
                         <option value="{{currencylist[from_position].code}}" selected>
@@ -99,10 +100,11 @@
                     </select>
                 </td>
             </tr>
+            <small id="sellHelp" class="form-text text-muted">Integer or decimal formatted, eg: 6 or 6.6</small>
         </table>
         {% endif %}
 
-        <button type="submit" name="submit" class="btn btn-primary" value="A" onclick="click();">Submit</button>
+        <button type="submit" name="submit" class="btn btn-outline-info" value="A" onclick="click();">Submit</button>
 
     </div>
     </body>

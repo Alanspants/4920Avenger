@@ -308,15 +308,20 @@ def game():
         fromAmount = request.form['fromAmount']
         result = convert(fromCurrency, toCurrency, fromAmount, currencylist, pos)
         result_temp = convert(fromCurrency, toCurrency, 1, currencylist, pos)
-        Gamer.update_gameCurrency(session['name'], fromCurrency, toCurrency, fromAmount)
+        flag = Gamer.update_gameCurrency(session['name'], fromCurrency, toCurrency, fromAmount)
+
         availableCurrency = Gamer.get_available_currency(session['name'])
         message = Gamer.get_message(session['name'])
         amount = str(Gamer.update_amount(session['name']))
-
+        gamer_rank = rank()
+        if flag == 0:
+            warning = "You don't have enough money!"
+            return render_template("game.html", currencylist=currencylist, availableCurrency=availableCurrency, pos=pos,
+                                   message=message, amount=amount, gamer_rank=gamer_rank, warning = warning)
         # return render_template("game.html", currencylist=currencylist, from_position=pos[fromCurrency],
         #                        to_position=pos[toCurrency], from_Amount=fromAmount, to_Amount=result,
         #                        temp_to_Amount=result_temp, availableCurrency=availableCurrency,pos=pos)
-        gamer_rank = rank()
+
         return render_template("game.html", currencylist=currencylist, availableCurrency=availableCurrency, pos=pos,
                                message=message, amount=amount, gamer_rank = gamer_rank)
     else:
