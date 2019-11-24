@@ -7,6 +7,9 @@ def rank():
     Database.setup()
     gamer_count = Database.get_all(document="game").count()
     sort_amount = {}
+    for index in range(0, gamer_count):
+        temp_name = Database.get_all(document="game")[index]["name"]
+        Gamer.update_amount(temp_name)
     for index in range(0,gamer_count):
         sort_amount[Database.get_all(document="game")[index]["name"]] = Database.get_all(document="game")[index]["amount"]
     # print(sort)
