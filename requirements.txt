@@ -5,6 +5,6 @@ lxml==4.4.1
 pandas==0.25.2
 pymongo==3.9.0
 passlib==1.7.1
-requests==2.22.0
+requests==2.31.0
 apscheduler==3.6.3
 alpha-vantage==2.1.2
